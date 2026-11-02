@@ -14,7 +14,7 @@ export function BrandedNotFound({
     <div className="branded-not-found-container">
       <div className="branded-not-found-card">
         <div className="branded-not-found-badge">
-          <Sparkles size={14} className="text-[#ffffff]" />
+          <Sparkles size={14} className="text-[#111111]" />
           <span>ERROR 404</span>
         </div>
         <h1 className="branded-not-found-title">{title}</h1>

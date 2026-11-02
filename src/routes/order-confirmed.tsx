@@ -28,7 +28,7 @@ function OrderConfirmedPage() {
     <div className="order-confirmed-container">
       <div className="order-confirmed-card">
         <div className="order-confirmed-icon-wrap">
-          <CheckCircle2 size={46} className="text-[#ffffff]" />
+          <CheckCircle2 size={46} className="text-[#111111]" />
         </div>
 
         <div className="order-confirmed-eyebrow">TRANSACTION AUTHORIZED</div>
@@ -43,7 +43,7 @@ function OrderConfirmedPage() {
         <div className="order-confirmed-details-box">
           <div className="order-detail-row">
             <span className="order-detail-label">Status</span>
-            <span className="order-detail-value text-[#ffffff]">Processing Dispatch</span>
+            <span className="order-detail-value text-[#111111]">Processing Dispatch</span>
           </div>
           <div className="order-detail-row">
             <span className="order-detail-label">Estimated Delivery</span>

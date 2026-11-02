@@ -148,7 +148,7 @@ export function ProductBuyBox({
         <div className="pdp-rating-row" aria-label={`Rating: ${product.rating || 5.0} stars`}>
           <div className="pdp-stars-flex">
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} size={14} fill="#ffffff" stroke="#ffffff" />
+              <Star key={star} size={14} fill="#000000" stroke="#000000" />
             ))}
           </div>
           <span className="pdp-rating-score">
@@ -352,8 +352,8 @@ export function ProductBuyBox({
         >
           <Heart
             size={18}
-            fill={isWishlisted ? "#ffffff" : "none"}
-            stroke={isWishlisted ? "#ffffff" : "currentColor"}
+            fill={isWishlisted ? "#111111" : "none"}
+            stroke={isWishlisted ? "#111111" : "currentColor"}
           />
           <span>{isWishlisted ? "SAVED IN WISHLIST" : "SAVE TO WISHLIST"}</span>
         </button>

@@ -123,7 +123,7 @@ function FAQPage() {
         ))}
 
         <div className="faq-bottom-help">
-          <HelpCircle size={28} className="text-[#ffffff]" />
+          <HelpCircle size={28} className="text-[#111111]" />
           <h3>STILL HAVE QUESTIONS?</h3>
           <p>
             Our client service team is standing by to assist with custom inquiries and fit advice.

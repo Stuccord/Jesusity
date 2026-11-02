@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const MESSAGES = [
   "Free delivery in Accra over GH₵500",
@@ -7,39 +7,42 @@ const MESSAGES = [
   "Delivery across Ghana",
 ];
 
+const INTERVAL_MS = 4500;
+
 export function AnnouncementBar() {
-  const [visible, setVisible] = useState(true);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
-  if (!visible) return null;
+  const step = useCallback((dir: 1 | -1) => {
+    setIndex((i) => (i + dir + MESSAGES.length) % MESSAGES.length);
+  }, []);
 
-  // Each group is repeated so it fills wide screens; the track holds two identical
-  // halves so translating by -50% loops seamlessly.
-  const group = [...MESSAGES, ...MESSAGES];
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => step(1), INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [paused, step, index]);
 
   return (
-    <div className="announcement-bar" role="region" aria-label="Announcement">
-      <span className="sr-only">{MESSAGES.join(". ")}</span>
-      <div className="announcement-ticker" aria-hidden="true">
-        <div className="announcement-track">
-          {[0, 1].map((half) => (
-            <div key={half} className="announcement-group">
-              {group.map((message, i) => (
-                <span key={i} className="announcement-item">
-                  {message}
-                  <span className="announcement-sep">•</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
+    <div
+      className="promo-bar"
+      role="region"
+      aria-label="Announcements"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <button type="button" className="promo-arrow" onClick={() => step(-1)} aria-label="Previous announcement">
+        <ChevronLeft size={16} />
+      </button>
+      <div className="promo-viewport" aria-live="polite">
+        {MESSAGES.map((message, i) => (
+          <p key={message} className={`promo-message ${i === index ? "is-active" : ""}`} aria-hidden={i !== index}>
+            {message}
+          </p>
+        ))}
       </div>
-      <button
-        type="button"
-        className="announcement-dismiss"
-        onClick={() => setVisible(false)}
-        aria-label="Dismiss announcement"
-      >
-        <X size={14} />
+      <button type="button" className="promo-arrow" onClick={() => step(1)} aria-label="Next announcement">
+        <ChevronRight size={16} />
       </button>
     </div>
   );

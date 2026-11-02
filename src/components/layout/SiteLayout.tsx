@@ -1,6 +1,7 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { AnnouncementBar } from "./AnnouncementBar";
+import { UtilityBar } from "./UtilityBar";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { CartDrawer } from "./CartDrawer";
@@ -27,19 +28,22 @@ export function SiteLayout({ children }: SiteLayoutProps) {
   }, [pathname]);
 
   return (
-    <div className="storefront-root site-container min-h-screen flex flex-col bg-black text-white">
+    <div className="storefront-root site-container min-h-screen flex flex-col bg-white text-black">
       {/* Reading progress line pinned to the top of the viewport */}
       <ScrollProgressBar />
       <ScrollReveal />
 
-      {/* Top announcement bar */}
-      <AnnouncementBar />
+      {/* Secondary links strip (desktop) */}
+      <UtilityBar />
 
       {/* Sticky navigation bar */}
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
       />
+
+      {/* Rotating promo messages under the nav */}
+      <AnnouncementBar />
 
       {/* Main page content */}
       <main id="main-content" className="flex-1">

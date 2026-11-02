@@ -71,7 +71,7 @@ export function CartDrawer() {
           ) : (
             <span>
               ADD{" "}
-              <strong className="text-white">
+              <strong className="text-black">
                 {formatGHS(FREE_DELIVERY_THRESHOLD - cartSubtotal)}
               </strong>{" "}
               MORE FOR FREE ACCRA DELIVERY

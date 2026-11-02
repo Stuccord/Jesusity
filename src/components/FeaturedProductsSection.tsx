@@ -354,8 +354,8 @@ export function FeaturedProductsSection({
                   >
                     <Heart
                       size={18}
-                      fill={isWishlisted ? "#ffffff" : "none"}
-                      stroke={isWishlisted ? "#ffffff" : "rgba(255, 255, 255, 0.85)"}
+                      fill={isWishlisted ? "#111111" : "none"}
+                      stroke={isWishlisted ? "#111111" : "rgba(17, 17, 17, 0.85)"}
                     />
                   </button>
 
@@ -438,8 +438,8 @@ export function FeaturedProductsSection({
                     <div className="featured-card-rating-row">
                       <Star
                         size={12}
-                        fill="#ffffff"
-                        stroke="#ffffff"
+                        fill="#000000"
+                        stroke="#000000"
                         className="featured-gold-star"
                       />
                       <span className="featured-rating-score">

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, Menu, Search, ShoppingBag, UserRound } from "lucide-react";
+import { ChevronDown, Heart, Menu, Search, ShoppingBag } from "lucide-react";
 import logoImage from "../../assets/logo.png";
 import { getNavItems, type NavItem } from "../../config/nav";
 import { useCart } from "../../context/CartContext";
@@ -204,19 +204,20 @@ export function Navbar({ onOpenSearch, onOpenMobileMenu }: NavbarProps) {
 
       {/* Header utility actions */}
       <div className="header-actions">
-        {/* Search icon */}
+        {/* Search pill (collapses to an icon on small screens) */}
         <button
           type="button"
-          className="icon-button search-button"
+          className="icon-button search-button search-pill"
           aria-label="Open search"
           onClick={onOpenSearch}
         >
           <Search size={20} />
+          <span className="search-pill-label">Search</span>
         </button>
 
-        {/* Account icon (hidden on mobile) */}
-        <Link to="/account" className="icon-button account-button" aria-label="My Account">
-          <UserRound size={20} />
+        {/* Favourites (wishlist lives on the account page) */}
+        <Link to="/account" className="icon-button account-button" aria-label="Favourites">
+          <Heart size={20} />
         </Link>
 
         {/* Cart button */}

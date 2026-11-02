@@ -44,7 +44,7 @@ function AboutPage() {
 
           <div className="about-pillars-grid">
             <div className="about-pillar-card">
-              <Sparkles size={24} className="text-[#ffffff]" />
+              <Sparkles size={24} className="text-[#111111]" />
               <h3>ARCHITECTURAL DRAPE</h3>
               <p>
                 Engineered drop shoulders, reinforced necklines, and calculated drape that holds
@@ -52,7 +52,7 @@ function AboutPage() {
               </p>
             </div>
             <div className="about-pillar-card">
-              <ShieldCheck size={24} className="text-[#ffffff]" />
+              <ShieldCheck size={24} className="text-[#111111]" />
               <h3>LIMITED RUNS</h3>
               <p>
                 Each capsule release is archived once allocated. We believe true luxury lies in
@@ -60,7 +60,7 @@ function AboutPage() {
               </p>
             </div>
             <div className="about-pillar-card">
-              <Trophy size={24} className="text-[#ffffff]" />
+              <Trophy size={24} className="text-[#111111]" />
               <h3>LOCAL ROOTS, GLOBAL FINISH</h3>
               <p>
                 Designed in Ghana with custom metallic hardware and master tailoring that competes
