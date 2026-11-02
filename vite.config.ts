@@ -12,4 +12,7 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Vercel sets VERCEL=1 during builds; emit .vercel/output there instead of a Cloudflare worker.
+  // Lovable's sandbox ignores this and keeps building for Cloudflare.
+  ...(process.env.VERCEL ? { nitro: { preset: "vercel" } } : {}),
 });

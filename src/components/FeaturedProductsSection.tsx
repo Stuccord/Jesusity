@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, ArrowRight, Check, Heart, Plus, Star } from "lucide-react";
 import { products, formatGHS, type Product } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 export interface FeaturedProductsSectionProps {
   productsList?: Product[];
@@ -17,6 +18,7 @@ export function FeaturedProductsSection({
   subcopy = "Heavyweight cotton. Scripture-inspired graphics. Limited drops.",
   viewAllLink = "/shop",
 }: FeaturedProductsSectionProps = {}) {
+  const { addToCart } = useCart();
   const railRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -158,6 +160,26 @@ export function FeaturedProductsSection({
     isDraggingRef.current = false;
   };
 
+  // 3D tilt + glare that follows the cursor (fine pointers only; CSS opts out for reduced motion)
+  const handleCardPointerMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    if (e.pointerType !== "mouse" || isDraggingRef.current) return;
+    const stage = e.currentTarget.querySelector<HTMLElement>(".featured-card-image-stage");
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    stage.style.setProperty("--tilt-x", `${(0.5 - y) * 10}deg`);
+    stage.style.setProperty("--tilt-y", `${(x - 0.5) * 12}deg`);
+    stage.style.setProperty("--glare-x", `${x * 100}%`);
+    stage.style.setProperty("--glare-y", `${y * 100}%`);
+  };
+
+  const handleCardPointerLeave = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    const stage = e.currentTarget.querySelector<HTMLElement>(".featured-card-image-stage");
+    stage?.style.setProperty("--tilt-x", "0deg");
+    stage?.style.setProperty("--tilt-y", "0deg");
+  };
+
   // Toggle wishlist
   const toggleWishlist = (e: React.MouseEvent, productId: string) => {
     e.preventDefault();
@@ -188,12 +210,7 @@ export function FeaturedProductsSection({
     const itemKey = `${product.id}-${size}`;
     setAddedItemKey(itemKey);
 
-    // Bump cart event for the navbar
-    window.dispatchEvent(
-      new CustomEvent("cart-item-added", {
-        detail: { product, size },
-      }),
-    );
+    addToCart(product, size);
 
     // Show toast
     setToast({ show: true, name: `${product.name} (${size})` });
@@ -281,6 +298,8 @@ export function FeaturedProductsSection({
                 href={`/products/${product.slug}`}
                 className="featured-card"
                 style={{ "--stagger-index": index } as React.CSSProperties}
+                onPointerMove={handleCardPointerMove}
+                onPointerLeave={handleCardPointerLeave}
                 onClick={(e) => {
                   if (hasDraggedRef.current) {
                     e.preventDefault();

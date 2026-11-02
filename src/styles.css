@@ -10238,3 +10238,144 @@ footer {
   }
 }
 
+
+/* ==========================================================================
+   WOW LAYER — scroll progress, kinetic marquee, 3D card tilt, delivery meter
+   ========================================================================== */
+
+/* Scroll progress line */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, #ffffff 0%, #c9a24b 100%);
+  box-shadow: 0 0 12px rgba(201, 162, 75, 0.6);
+  pointer-events: none;
+}
+
+/* Kinetic marquee */
+.brand-marquee {
+  position: relative;
+  overflow: hidden;
+  background: #000000;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.brand-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: brandMarquee 38s linear infinite;
+}
+.brand-marquee:hover .brand-marquee-track {
+  animation-play-state: paused;
+}
+.brand-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.6vw, 64px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+.brand-marquee-item.outlined {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
+}
+.brand-marquee-star {
+  font-size: 0.4em;
+  color: #c9a24b;
+  -webkit-text-stroke: 0;
+}
+@keyframes brandMarquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 3D tilt + glare on featured product cards */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .featured-card {
+    perspective: 900px;
+  }
+  .featured-card .featured-card-image-stage {
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+    transition:
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 300ms ease,
+      box-shadow 420ms ease;
+    will-change: transform;
+  }
+  .featured-card:hover .featured-card-image-stage {
+    transition-duration: 120ms, 300ms, 420ms;
+    box-shadow:
+      0 30px 60px -20px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+  .featured-card .featured-card-image-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    background: radial-gradient(
+      circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.04) 28%,
+      transparent 55%
+    );
+    mix-blend-mode: screen;
+  }
+  .featured-card:hover .featured-card-image-stage::after {
+    opacity: 1;
+  }
+}
+
+/* Animated free-delivery meter in the cart drawer */
+.cart-perk-meter {
+  position: relative;
+  height: 3px;
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.cart-perk-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8a6d2b, #c9a24b, #f1d78f);
+  transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cart-perk-meter.complete .cart-perk-meter-fill {
+  background-size: 200% 100%;
+  background-image: linear-gradient(90deg, #c9a24b 0%, #fff3c4 50%, #c9a24b 100%);
+  animation: perkShimmer 1.8s linear infinite;
+}
+@keyframes perkShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-marquee-track,
+  .cart-perk-meter.complete .cart-perk-meter-fill {
+    animation: none;
+  }
+  .brand-marquee {
+    overflow-x: auto;
+  }
+}

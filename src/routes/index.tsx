@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import heroImage from "../assets/hero-thorns.jpg";
 import { TrendingItemSection } from "../components/TrendingItemSection";
 import { FeaturedProductsSection } from "../components/FeaturedProductsSection";
+import { BrandMarquee } from "../components/common/BrandMarquee";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,6 +70,9 @@ function Index() {
           </span>
         </a>
       </section>
+
+      {/* KINETIC MARQUEE */}
+      <BrandMarquee />
 
       {/* TRENDING ITEM SECTION */}
       <TrendingItemSection />

@@ -4,6 +4,8 @@ import { ArrowRight, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { formatGHS } from "../../data/products";
 
+const FREE_DELIVERY_THRESHOLD = 500;
+
 export function CartDrawer() {
   const { items, isCartOpen, closeCart, cartCount, cartSubtotal, updateQuantity, removeFromCart } =
     useCart();
@@ -64,14 +66,30 @@ export function CartDrawer() {
 
         {/* Free Shipping Progress */}
         <div className="cart-drawer-perk">
-          {cartSubtotal >= 500 ? (
+          {cartSubtotal >= FREE_DELIVERY_THRESHOLD ? (
             <span className="cart-perk-qualified">✓ YOU QUALIFY FOR FREE ACCRA DELIVERY</span>
           ) : (
             <span>
-              ADD <strong className="text-white">{formatGHS(500 - cartSubtotal)}</strong> MORE FOR
-              FREE ACCRA DELIVERY
+              ADD{" "}
+              <strong className="text-white">
+                {formatGHS(FREE_DELIVERY_THRESHOLD - cartSubtotal)}
+              </strong>{" "}
+              MORE FOR FREE ACCRA DELIVERY
             </span>
           )}
+          <div
+            className={`cart-perk-meter ${cartSubtotal >= FREE_DELIVERY_THRESHOLD ? "complete" : ""}`}
+            role="progressbar"
+            aria-label="Progress to free delivery"
+            aria-valuemin={0}
+            aria-valuemax={FREE_DELIVERY_THRESHOLD}
+            aria-valuenow={Math.min(cartSubtotal, FREE_DELIVERY_THRESHOLD)}
+          >
+            <div
+              className="cart-perk-meter-fill"
+              style={{ width: `${Math.min(100, (cartSubtotal / FREE_DELIVERY_THRESHOLD) * 100)}%` }}
+            />
+          </div>
         </div>
 
         {/* Items List or Empty State */}
