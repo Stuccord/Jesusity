@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 // Blocks that fade/slide in as they enter the viewport. Sections that already run
-// their own entrance (e.g. the featured rail) are left out.
+// their own entrance (e.g. the featured rail) and the footer are left out.
 const REVEAL_SELECTORS = [
   "main section:not(.hero-section):not(.featured-collection-section)",
   ".catalog-product-card",
   ".page-header",
-  ".site-footer .footer-main > *",
 ].join(", ");
 
 export function ScrollReveal() {
@@ -40,9 +39,19 @@ export function ScrollReveal() {
       });
     });
 
+    // Safety net: once the reader reaches the bottom, show anything still hidden.
+    const revealRest = () => {
+      if (window.innerHeight + window.scrollY < document.documentElement.scrollHeight - 40) return;
+      document.querySelectorAll(".reveal:not(.is-revealed)").forEach((el) => {
+        el.classList.add("is-revealed");
+      });
+    };
+    window.addEventListener("scroll", revealRest, { passive: true });
+
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      window.removeEventListener("scroll", revealRest);
     };
   }, [pathname]);
 

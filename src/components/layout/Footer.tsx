@@ -40,7 +40,7 @@ export function Footer() {
 
         {/* SHOP Column */}
         <nav className="footer-nav-col" aria-label="Shop Navigation">
-          <h3 className="footer-col-title">SHOP</h3>
+          <h3 className="footer-col-title">Shop</h3>
           <ul className="footer-links-list">
             <li>
               <Link to="/shop" search={{ sort: "best-selling" }}>
@@ -60,7 +60,7 @@ export function Footer() {
 
         {/* HELP Column */}
         <nav className="footer-nav-col" aria-label="Help & Customer Service">
-          <h3 className="footer-col-title">HELP</h3>
+          <h3 className="footer-col-title">Help</h3>
           <ul className="footer-links-list">
             <li>
               <Link to="/faq">FAQ</Link>
@@ -86,7 +86,7 @@ export function Footer() {
 
         {/* BRAND Column */}
         <nav className="footer-nav-col" aria-label="Brand & Community">
-          <h3 className="footer-col-title">BRAND</h3>
+          <h3 className="footer-col-title">Brand</h3>
           <ul className="footer-links-list">
             <li>
               <Link to="/about">About Us</Link>
@@ -109,7 +109,7 @@ export function Footer() {
 
         {/* Newsletter & Socials */}
         <div className="footer-newsletter-col">
-          <h3 className="footer-col-title">STAY CONNECTED</h3>
+          <h3 className="footer-col-title">Stay Connected</h3>
           <p className="footer-newsletter-copy">
             Receive exclusive early release notifications and archival restocks.
           </p>
@@ -121,7 +121,7 @@ export function Footer() {
               id="footer-newsletter-email"
               type="email"
               required
-              placeholder="ENTER YOUR EMAIL"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="footer-email-input"
