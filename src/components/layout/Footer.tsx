@@ -51,7 +51,9 @@ export function Footer() {
               <Link to="/shop">Graphic Tees</Link>
             </li>
             <li>
-              <Link to="/collections">Collections</Link>
+              <Link to="/collections/$slug" params={{ slug: "core-essentials" }}>
+                Core Essentials
+              </Link>
             </li>
           </ul>
         </nav>

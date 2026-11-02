@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import heroImage from "../assets/hero-thorns.jpg";
 import { TrendingItemSection } from "../components/TrendingItemSection";
 import { FeaturedProductsSection } from "../components/FeaturedProductsSection";
-import { BrandMarquee } from "../components/common/BrandMarquee";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,9 +32,12 @@ function Index() {
       <section className="hero-section" aria-label="Hero">
         <div className="hero-copy">
           <h1>
-            Endless
-            <br />
-            Pursuit
+            <span className="hero-line">
+              <span>Endless</span>
+            </span>
+            <span className="hero-line">
+              <span>Pursuit</span>
+            </span>
           </h1>
           <p className="hero-subtext">
             Timeless style. Unmatched quality.
@@ -70,9 +72,6 @@ function Index() {
           </span>
         </a>
       </section>
-
-      {/* KINETIC MARQUEE */}
-      <BrandMarquee />
 
       {/* TRENDING ITEM SECTION */}
       <TrendingItemSection />

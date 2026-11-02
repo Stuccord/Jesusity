@@ -7,6 +7,7 @@ import { CartDrawer } from "./CartDrawer";
 import { SearchOverlay } from "./SearchOverlay";
 import { MobileMenu } from "./MobileMenu";
 import { ScrollProgressBar } from "../common/ScrollProgressBar";
+import { ScrollReveal } from "../common/ScrollReveal";
 
 interface SiteLayoutProps {
   children: ReactNode;
@@ -29,6 +30,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
     <div className="storefront-root site-container min-h-screen flex flex-col bg-black text-white">
       {/* Reading progress line pinned to the top of the viewport */}
       <ScrollProgressBar />
+      <ScrollReveal />
 
       {/* Top announcement bar */}
       <AnnouncementBar />

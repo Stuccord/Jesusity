@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, ArrowRight, Package, Truck } from "lucide-react";
 import { PageHeader } from "../components/common/PageHeader";
@@ -17,7 +18,11 @@ export const Route = createFileRoute("/order-confirmed")({
 });
 
 function OrderConfirmedPage() {
-  const orderNumber = "SN-" + Math.floor(100000 + Math.random() * 900000);
+  // Generated after mount so the server and client render the same markup.
+  const [orderNumber, setOrderNumber] = useState("SN-······");
+  useEffect(() => {
+    setOrderNumber("SN-" + Math.floor(100000 + Math.random() * 900000));
+  }, []);
 
   return (
     <div className="order-confirmed-container">
