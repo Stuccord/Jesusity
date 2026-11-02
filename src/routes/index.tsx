@@ -65,8 +65,6 @@ function Index() {
           />
           <div className="hero-spotlight">
             <img src={heroImage} alt="" className="hero-bg-image hero-lit-image" />
-            <span className="hero-beam" />
-            <span className="hero-beam-dust" />
           </div>
         </div>
 
