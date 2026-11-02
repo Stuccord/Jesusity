@@ -21,7 +21,7 @@ export function ComingTogetherBlock({
   return (
     <div className="coming-together-card">
       <div className="coming-together-badge">
-        <Sparkles size={13} className="text-[#C9A24B]" />
+        <Sparkles size={13} className="text-[#ffffff]" />
         <span>COMING TOGETHER</span>
       </div>
       <h2 className="coming-together-heading">{title}</h2>

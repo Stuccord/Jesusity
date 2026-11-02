@@ -975,7 +975,7 @@ a {
 
 /* 3. Scripture Tag */
 .trending-scripture-wrapper {
-  border-top: 1px solid rgba(201, 162, 75, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
   padding-top: 12px;
   margin-top: -6px;
 }
@@ -985,7 +985,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #c9a24b;
+  color: #ffffff;
   display: inline-block;
 }
 
@@ -1345,7 +1345,7 @@ a {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.18em;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 /* Size Guide Modal */
@@ -2323,8 +2323,8 @@ a {
 }
 
 .featured-rating-row .star-icon {
-  color: #eab308;
-  fill: #eab308;
+  color: #ffffff;
+  fill: #ffffff;
 }
 
 .featured-rating-row .rating-val {
@@ -3489,8 +3489,8 @@ footer {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #c9a24b;
-  border: 1px solid rgba(201, 162, 75, 0.4);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 2px;
 }
 
@@ -3803,7 +3803,7 @@ footer {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 /* SIZE GUIDE MODAL */
@@ -4705,7 +4705,7 @@ footer {
 }
 
 .featured-gold-star {
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .featured-rating-score {
@@ -4847,7 +4847,7 @@ footer {
 .featured-toast-link {
   font-size: 13px;
   font-weight: 700;
-  color: #c9a24b;
+  color: #ffffff;
   text-decoration: none;
   letter-spacing: 0.05em;
 }
@@ -5027,7 +5027,7 @@ footer {
 }
 
 .nav-dropdown-item.is-child-active {
-  color: #c9a24b;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -5115,8 +5115,8 @@ footer {
 }
 
 .cart-drawer-perk {
-  background: rgba(201, 162, 75, 0.08);
-  border-bottom: 1px solid rgba(201, 162, 75, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 10px 24px;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -5126,7 +5126,7 @@ footer {
 }
 
 .cart-perk-qualified {
-  color: #c9a24b;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -5179,7 +5179,7 @@ footer {
 }
 
 .cart-empty-btn:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
   color: #000000;
 }
 
@@ -5353,7 +5353,7 @@ footer {
 }
 
 .cart-checkout-btn:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
   color: #000000;
 }
 
@@ -5435,7 +5435,7 @@ footer {
 }
 
 .search-overlay-icon {
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .search-overlay-input {
@@ -5486,7 +5486,7 @@ footer {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .search-view-all-link {
@@ -5721,7 +5721,7 @@ footer {
 
 .mobile-chevron.rotated {
   transform: rotate(180deg);
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .mobile-submenu {
@@ -5789,7 +5789,7 @@ footer {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #c9a24b;
+  color: #ffffff;
   margin-bottom: 12px;
 }
 
@@ -5833,9 +5833,9 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(201, 162, 75, 0.08);
-  border: 1px solid rgba(201, 162, 75, 0.25);
-  color: #c9a24b;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -5884,7 +5884,7 @@ footer {
 }
 
 .coming-together-btn-primary:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .coming-together-btn-secondary {
@@ -5962,8 +5962,8 @@ footer {
 }
 
 .catalog-tab-btn.sale-tab.active {
-  background: #c9a24b;
-  border-color: #c9a24b;
+  background: #d4d4d4;
+  border-color: #ffffff;
   color: #000000;
 }
 
@@ -6088,8 +6088,8 @@ footer {
 .catalog-card-badge.badge-trending,
 .catalog-card-badge.badge-limited,
 .catalog-card-badge.badge-best-seller {
-  border-color: #c9a24b;
-  color: #c9a24b;
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 /* Quick Add Bar */
@@ -6127,7 +6127,7 @@ footer {
 }
 
 .catalog-quick-add-trigger:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .catalog-size-picker {
@@ -6359,7 +6359,7 @@ footer {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: #c9a24b;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
@@ -6403,7 +6403,7 @@ footer {
 
 .pdp-payment-notice {
   font-size: 13px;
-  color: #c9a24b;
+  color: #ffffff;
   margin-left: auto;
   font-weight: 600;
 }
@@ -6467,7 +6467,7 @@ footer {
   border: none;
   font-size: 12px;
   font-weight: 600;
-  color: #c9a24b;
+  color: #ffffff;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -6554,7 +6554,7 @@ footer {
 }
 
 .pdp-add-cart-btn:hover:not(:disabled) {
-  background: #c9a24b;
+  background: #d4d4d4;
   color: #000000;
 }
 
@@ -6594,7 +6594,7 @@ footer {
 }
 
 .pdp-spec-item svg {
-  color: #c9a24b;
+  color: #ffffff;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -6656,7 +6656,7 @@ footer {
 
 .size-guide-table th {
   background: #161616;
-  color: #c9a24b;
+  color: #ffffff;
   font-weight: 700;
   padding: 10px 14px;
   text-align: left;
@@ -6844,11 +6844,11 @@ footer {
 }
 
 .cart-delivery-incentive {
-  background: rgba(201, 162, 75, 0.08);
-  border: 1px solid rgba(201, 162, 75, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 10px 14px;
   font-size: 12px;
-  color: #c9a24b;
+  color: #ffffff;
   margin-bottom: 16px;
 }
 
@@ -6882,7 +6882,7 @@ footer {
 }
 
 .cart-checkout-cta:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .cart-perks-list {
@@ -6926,7 +6926,7 @@ footer {
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 800;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .checkout-step-header h3 {
@@ -7005,8 +7005,8 @@ footer {
 }
 
 .payment-option-card.selected {
-  border-color: #c9a24b;
-  background: rgba(201, 162, 75, 0.06);
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .payment-option-card strong {
@@ -7148,7 +7148,7 @@ footer {
 }
 
 .checkout-submit-btn:hover:not(:disabled) {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .checkout-submit-btn:disabled {
@@ -7167,7 +7167,7 @@ footer {
 }
 
 .checkout-guarantee svg {
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -7205,7 +7205,7 @@ footer {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
-  color: #c9a24b;
+  color: #ffffff;
   margin-bottom: 8px;
 }
 
@@ -7289,7 +7289,7 @@ footer {
 
 .order-confirmed-btn-primary:hover,
 .branded-not-found-btn-primary:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .order-confirmed-btn-secondary,
@@ -7555,12 +7555,12 @@ footer {
 }
 
 .contact-submit-btn:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .contact-success-box {
-  background: rgba(201, 162, 75, 0.08);
-  border: 1px solid rgba(201, 162, 75, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 32px;
   text-align: center;
   display: flex;
@@ -7590,7 +7590,7 @@ footer {
   font-size: 20px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #c9a24b;
+  color: #ffffff;
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -7631,7 +7631,7 @@ footer {
 
 .faq-chevron.rotated {
   transform: rotate(180deg);
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .faq-answer-panel {
@@ -7705,7 +7705,7 @@ footer {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #c9a24b;
+  color: #ffffff;
   margin: 0 0 10px 0;
 }
 
@@ -7802,7 +7802,7 @@ footer {
 
 .account-track-link {
   font-size: 12px;
-  color: #c9a24b;
+  color: #ffffff;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -7873,7 +7873,7 @@ footer {
 .track-sample-btn {
   background: transparent;
   border: none;
-  color: #c9a24b;
+  color: #ffffff;
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
@@ -7897,7 +7897,7 @@ footer {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .track-result-header h2 {
@@ -7911,9 +7911,9 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(201, 162, 75, 0.1);
-  border: 1px solid #c9a24b;
-  color: #c9a24b;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #ffffff;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -7988,9 +7988,9 @@ footer {
 }
 
 .track-timeline-step.active .track-dot {
-  border-color: #c9a24b;
-  color: #c9a24b;
-  background: rgba(201, 162, 75, 0.15);
+  border-color: #ffffff;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .track-step-info h4 {
@@ -8011,7 +8011,7 @@ footer {
 
 .track-step-info small {
   font-size: 11px;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 /* Lookbook */
@@ -8086,7 +8086,7 @@ footer {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
-  color: #c9a24b;
+  color: #ffffff;
   display: block;
   margin-bottom: 8px;
 }
@@ -8125,7 +8125,7 @@ footer {
 }
 
 .lookbook-cta-btn:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 /* Search Page */
@@ -8145,7 +8145,7 @@ footer {
 }
 
 .search-page-form-icon {
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 .search-page-input {
@@ -8236,7 +8236,7 @@ footer {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  color: #c9a24b;
+  color: #ffffff;
   margin-top: 8px;
 }
 
@@ -8310,7 +8310,7 @@ footer {
 }
 
 .footer-submit-btn:hover {
-  background: #c9a24b;
+  background: #d4d4d4;
 }
 
 .footer-social-row {
@@ -8366,7 +8366,7 @@ footer {
 
 /* ==========================================================================
    PRODUCT DETAIL PAGE (/products/:slug) STYLES
-   Pure Black (#000000), White text, Gold (#C9A24B), Sharp Corners (0px)
+   Pure Black (#000000), White text, White (#FFFFFF), Sharp Corners (0px)
    ========================================================================== */
 
 .pdp-page-container {
@@ -8795,8 +8795,8 @@ footer {
 
 .pdp-badge-low-stock {
   background: transparent;
-  color: #c9a24b;
-  border: 1px solid #c9a24b;
+  color: #ffffff;
+  border: 1px solid #ffffff;
 }
 
 /* 2. Name & Colorway */
@@ -8837,7 +8837,7 @@ footer {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #c9a24b;
+  color: #ffffff;
 }
 
 /* 4. Price & Payment note */
@@ -8982,7 +8982,7 @@ footer {
 }
 
 .pdp-size-chosen {
-  color: #c9a24b;
+  color: #ffffff;
   margin-left: 6px;
 }
 
@@ -9144,9 +9144,9 @@ footer {
 }
 
 .pdp-btn-primary.added {
-  background: #c9a24b;
+  background: #d4d4d4;
   color: #000000;
-  border-color: #c9a24b;
+  border-color: #ffffff;
 }
 
 .pdp-btn-secondary {
@@ -9264,7 +9264,7 @@ footer {
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #c9a24b;
+  color: #ffffff;
   margin-top: 6px;
 }
 
@@ -9465,7 +9465,7 @@ footer {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #c9a24b;
+  color: #ffffff;
   margin-top: 8px;
 }
 
@@ -9566,7 +9566,7 @@ footer {
 
 .pdp-size-guide-tip-box {
   background: rgba(255, 255, 255, 0.04);
-  border-left: 2px solid #c9a24b;
+  border-left: 2px solid #ffffff;
   padding: 12px 16px;
   margin-bottom: 24px;
 }
@@ -9859,7 +9859,7 @@ footer {
 }
 
 .pdp-mobile-bar-add-btn.added {
-  background: #c9a24b;
+  background: #d4d4d4;
   color: #000000;
 }
 
@@ -10253,8 +10253,8 @@ footer {
   z-index: 9999;
   transform: scaleX(0);
   transform-origin: 0 50%;
-  background: linear-gradient(90deg, #ffffff 0%, #c9a24b 100%);
-  box-shadow: 0 0 12px rgba(201, 162, 75, 0.6);
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
   pointer-events: none;
 }
 
@@ -10309,12 +10309,12 @@ footer {
 }
 .cart-perk-meter-fill {
   height: 100%;
-  background: linear-gradient(90deg, #8a6d2b, #c9a24b, #f1d78f);
+  background: linear-gradient(90deg, #6b6b6b, #bdbdbd, #ffffff);
   transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cart-perk-meter.complete .cart-perk-meter-fill {
   background-size: 200% 100%;
-  background-image: linear-gradient(90deg, #c9a24b 0%, #fff3c4 50%, #c9a24b 100%);
+  background-image: linear-gradient(90deg, #ffffff 0%, #8a8a8a 50%, #ffffff 100%);
   animation: perkShimmer 1.8s linear infinite;
 }
 @keyframes perkShimmer {
@@ -10396,7 +10396,7 @@ footer {
   background: linear-gradient(
     110deg,
     transparent 30%,
-    rgba(201, 162, 75, 0.35) 50%,
+    rgba(255, 255, 255, 0.35) 50%,
     transparent 70%
   );
   transform: translateX(-120%);

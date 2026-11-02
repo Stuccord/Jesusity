@@ -148,7 +148,7 @@ export function ProductBuyBox({
         <div className="pdp-rating-row" aria-label={`Rating: ${product.rating || 5.0} stars`}>
           <div className="pdp-stars-flex">
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} size={14} fill="#C9A24B" stroke="#C9A24B" />
+              <Star key={star} size={14} fill="#ffffff" stroke="#ffffff" />
             ))}
           </div>
           <span className="pdp-rating-score">

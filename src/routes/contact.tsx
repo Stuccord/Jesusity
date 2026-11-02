@@ -47,21 +47,21 @@ function ContactPage() {
         {/* Left Column: Direct Info Cards */}
         <div className="contact-info-cards">
           <div className="contact-info-card">
-            <MapPin size={22} className="text-[#C9A24B]" />
+            <MapPin size={22} className="text-[#ffffff]" />
             <h3>ACCRA ATELIER</h3>
             <p>14 Ring Road Central, Osu / Danquah District</p>
             <p className="contact-subtext">Accra, Greater Accra, Ghana</p>
           </div>
 
           <div className="contact-info-card">
-            <Mail size={22} className="text-[#C9A24B]" />
+            <Mail size={22} className="text-[#ffffff]" />
             <h3>ELECTRONIC INQUIRIES</h3>
             <p>concierge@supernaturalapparel.com</p>
             <p className="contact-subtext">Responses dispatched within 4 hours</p>
           </div>
 
           <div className="contact-info-card">
-            <Phone size={22} className="text-[#C9A24B]" />
+            <Phone size={22} className="text-[#ffffff]" />
             <h3>DIRECT / WHATSAPP</h3>
             <p>+233 (0) 54 892 0192</p>
             <p className="contact-subtext">Monday – Saturday: 9:00 AM – 7:00 PM GMT</p>
@@ -75,7 +75,7 @@ function ContactPage() {
 
           {submitted ? (
             <div className="contact-success-box">
-              <Check size={28} className="text-[#C9A24B]" />
+              <Check size={28} className="text-[#ffffff]" />
               <h4>MESSAGE TRANSMITTED</h4>
               <p>
                 Thank you for reaching out. We have logged your request and will respond via email

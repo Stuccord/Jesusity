@@ -438,8 +438,8 @@ export function FeaturedProductsSection({
                     <div className="featured-card-rating-row">
                       <Star
                         size={12}
-                        fill="#C9A24B"
-                        stroke="#C9A24B"
+                        fill="#ffffff"
+                        stroke="#ffffff"
                         className="featured-gold-star"
                       />
                       <span className="featured-rating-score">
