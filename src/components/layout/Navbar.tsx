@@ -124,8 +124,8 @@ export function Navbar({ onOpenSearch, onOpenMobileMenu }: NavbarProps) {
   return (
     <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
       {/* Brand logo: ALWAYS links to "/" */}
-      <Link to="/" className="brand" aria-label="Supernatural official home">
-        <img src={logoImage} alt="Supernatural" className="brand-logo" />
+      <Link to="/" className="brand" aria-label="Jesusity official home">
+        <img src={logoImage} alt="Jesusity" className="brand-logo" />
       </Link>
 
       {/* Desktop Navigation */}

@@ -5,11 +5,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Us | Supernatural Apparel" },
+      { title: "About Us | Jesusity" },
       {
         name: "description",
         content:
-          "Discover Supernatural Apparel: the story of our relentless pursuit of timeless luxury streetwear and heavy-gauge craftsmanship.",
+          "Discover Jesusity: the story of our relentless pursuit of timeless luxury streetwear and heavy-gauge craftsmanship.",
       },
     ],
   }),
@@ -30,7 +30,7 @@ function AboutPage() {
           <div className="about-narrative-text">
             <h2>CRAFTED WITHOUT COMPROMISE</h2>
             <p>
-              Supernatural was founded on a singular conviction: streetwear should not be
+              Jesusity was founded on a singular conviction: streetwear should not be
               disposable. In an era of fleeting trends and flimsy fabrics, we craft architectural
               essentials from dense, 280 to 480 GSM combed luxury cotton designed to endure decades
               of wear.

@@ -16,11 +16,11 @@ export const Route = createFileRoute("/search")({
   },
   head: () => ({
     meta: [
-      { title: "Search Catalog | Supernatural Apparel" },
+      { title: "Search Catalog | Jesusity" },
       {
         name: "description",
         content:
-          "Search the complete Supernatural catalog of heavyweight graphic tees and luxury essentials.",
+          "Search the complete Jesusity catalog of heavyweight graphic tees and luxury essentials.",
       },
     ],
   }),

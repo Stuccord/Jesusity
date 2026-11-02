@@ -16,7 +16,7 @@ export const Route = createFileRoute("/products/$slug")({
     if (!product) {
       return {
         meta: [
-          { title: "Product Not Found | Supernatural Apparel" },
+          { title: "Product Not Found | Jesusity" },
           {
             name: "description",
             content: "The requested piece could not be located in our catalog.",
@@ -27,12 +27,12 @@ export const Route = createFileRoute("/products/$slug")({
 
     return {
       meta: [
-        { title: `${product.name} | Supernatural Apparel` },
+        { title: `${product.name} | Jesusity` },
         {
           name: "description",
           content:
             product.description ||
-            `Luxury heavyweight streetwear essential engineered by Supernatural. ${product.colorway}.`,
+            `Luxury heavyweight streetwear essential engineered by Jesusity. ${product.colorway}.`,
         },
       ],
     };
@@ -83,15 +83,15 @@ function ProductDetailPage() {
     name: product.name,
     image: [product.images.front, product.images.back].filter(Boolean),
     description:
-      product.description || `${product.name} in ${product.colorway} by Supernatural Apparel.`,
+      product.description || `${product.name} in ${product.colorway} by Jesusity.`,
     color: product.colorway,
     brand: {
       "@type": "Brand",
-      name: "Supernatural",
+      name: "Jesusity",
     },
     offers: {
       "@type": "Offer",
-      url: `https://supernatural.store/products/${product.slug}`,
+      url: `https://jesusity.com/products/${product.slug}`,
       priceCurrency: "GHS",
       price: product.price,
       availability: isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",

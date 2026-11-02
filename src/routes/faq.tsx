@@ -6,11 +6,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "FAQ | Supernatural Apparel" },
+      { title: "FAQ | Jesusity" },
       {
         name: "description",
         content:
-          "Answers to common questions regarding Supernatural sizing, Mobile Money payments, shipping in Accra, and returns.",
+          "Answers to common questions regarding Jesusity sizing, Mobile Money payments, shipping in Accra, and returns.",
       },
     ],
   }),
@@ -56,7 +56,7 @@ const FAQ_ITEMS = [
     category: "SIZING & GARMENT CARE",
     questions: [
       {
-        q: "How do Supernatural garments fit?",
+        q: "How do Jesusity garments fit?",
         a: "All our tees are designed with an architectural relaxed drape and structured drop shoulders. If you prefer a tailored standard fit, you can size down. For the signature relaxed streetwear look, select your true size.",
       },
       {

@@ -7,11 +7,11 @@ import { ComingTogetherBlock } from "../components/common/ComingTogetherBlock";
 export const Route = createFileRoute("/account")({
   head: () => ({
     meta: [
-      { title: "My Account | Supernatural Apparel" },
+      { title: "My Account | Jesusity" },
       {
         name: "description",
         content:
-          "Access your Supernatural profile, track active orders, manage delivery addresses, and view your wishlist.",
+          "Access your Jesusity profile, track active orders, manage delivery addresses, and view your wishlist.",
       },
     ],
   }),
@@ -80,7 +80,7 @@ function AccountPage() {
             <div className="account-order-item">
               <div className="account-order-top">
                 <div>
-                  <strong>ORDER #SN-77291</strong>
+                  <strong>ORDER #JS-77291</strong>
                   <span className="account-order-date">Placed October 10, 2026</span>
                 </div>
                 <span className="account-status-badge status-delivered">DELIVERED</span>
@@ -93,7 +93,7 @@ function AccountPage() {
             <div className="account-order-item">
               <div className="account-order-top">
                 <div>
-                  <strong>ORDER #SN-68214</strong>
+                  <strong>ORDER #JS-68214</strong>
                   <span className="account-order-date">Placed September 28, 2026</span>
                 </div>
                 <span className="account-status-badge status-delivered">DELIVERED</span>

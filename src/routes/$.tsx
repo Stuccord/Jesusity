@@ -4,7 +4,7 @@ import { BrandedNotFound } from "../components/common/BrandedNotFound";
 export const Route = createFileRoute("/$")({
   head: () => ({
     meta: [
-      { title: "Page Not Found | Supernatural Apparel" },
+      { title: "Page Not Found | Jesusity" },
       { name: "description", content: "The requested page does not exist." },
     ],
   }),

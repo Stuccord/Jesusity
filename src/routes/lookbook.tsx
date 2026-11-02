@@ -9,11 +9,11 @@ import { products } from "../data/products";
 export const Route = createFileRoute("/lookbook")({
   head: () => ({
     meta: [
-      { title: "Lookbook | Supernatural Apparel" },
+      { title: "Lookbook | Jesusity" },
       {
         name: "description",
         content:
-          "Explore the visual editorial lookbook for Supernatural: architectural silhouettes, raw street textures, and timeless luxury.",
+          "Explore the visual editorial lookbook for Jesusity: architectural silhouettes, raw street textures, and timeless luxury.",
       },
     ],
   }),

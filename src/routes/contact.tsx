@@ -6,11 +6,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Us | Supernatural Apparel" },
+      { title: "Contact Us | Jesusity" },
       {
         name: "description",
         content:
-          "Get in touch with the Supernatural concierge team for order inquiries, bespoke requests, and showroom appointments in Accra.",
+          "Get in touch with the Jesusity concierge team for order inquiries, bespoke requests, and showroom appointments in Accra.",
       },
     ],
   }),
@@ -56,7 +56,7 @@ function ContactPage() {
           <div className="contact-info-card">
             <Mail size={22} className="text-[#ffffff]" />
             <h3>ELECTRONIC INQUIRIES</h3>
-            <p>concierge@supernaturalapparel.com</p>
+            <p>concierge@jesusity.com</p>
             <p className="contact-subtext">Responses dispatched within 4 hours</p>
           </div>
 
@@ -128,7 +128,7 @@ function ContactPage() {
                   id="contact-message"
                   required
                   rows={5}
-                  placeholder="How can we assist you with Supernatural garments?"
+                  placeholder="How can we assist you with Jesusity garments?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />

@@ -51,7 +51,7 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }: MobileMenuProps) {
     >
       <div className="mobile-menu-header">
         <Link to="/" className="mobile-menu-brand" onClick={onClose}>
-          <img src={logoImage} alt="Supernatural" className="mobile-menu-logo" />
+          <img src={logoImage} alt="Jesusity" className="mobile-menu-logo" />
         </Link>
         <button
           type="button"

@@ -6,11 +6,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/track")({
   head: () => ({
     meta: [
-      { title: "Track Order | Supernatural Apparel" },
+      { title: "Track Order | Jesusity" },
       {
         name: "description",
         content:
-          "Track your Supernatural shipment status and estimated doorstep delivery in real time.",
+          "Track your Jesusity shipment status and estimated doorstep delivery in real time.",
       },
     ],
   }),
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/track")({
 
 function TrackOrderPage() {
   const [orderId, setOrderId] = useState("");
-  const [searchedOrder, setSearchedOrder] = useState<string | null>("SN-77291");
+  const [searchedOrder, setSearchedOrder] = useState<string | null>("JS-77291");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +29,8 @@ function TrackOrderPage() {
   };
 
   const handleSampleClick = () => {
-    setOrderId("SN-77291");
-    setSearchedOrder("SN-77291");
+    setOrderId("JS-77291");
+    setSearchedOrder("JS-77291");
   };
 
   return (
@@ -48,7 +48,7 @@ function TrackOrderPage() {
             <input
               type="text"
               required
-              placeholder="ENTER ORDER REFERENCE (E.G. SN-77291)"
+              placeholder="ENTER ORDER REFERENCE (E.G. JS-77291)"
               value={orderId}
               onChange={(e) => setOrderId(e.target.value)}
               className="track-input"
@@ -62,7 +62,7 @@ function TrackOrderPage() {
         <div className="track-sample-prompt">
           <span>Testing?</span>
           <button type="button" onClick={handleSampleClick} className="track-sample-btn">
-            Click to load sample order #SN-77291
+            Click to load sample order #JS-77291
           </button>
         </div>
 
@@ -90,7 +90,7 @@ function TrackOrderPage() {
               </div>
               <div>
                 <span className="label">Carrier:</span>
-                <strong>Supernatural Direct Courier</strong>
+                <strong>Jesusity Direct Courier</strong>
               </div>
             </div>
 

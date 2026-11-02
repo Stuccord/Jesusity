@@ -23,8 +23,8 @@ export function Footer() {
       <div className="footer-main">
         {/* Brand column */}
         <div className="footer-brand">
-          <Link to="/" className="brand" aria-label="Supernatural homepage">
-            <img src={logoImage} alt="Supernatural" className="brand-logo footer-brand-logo" />
+          <Link to="/" className="brand" aria-label="Jesusity homepage">
+            <img src={logoImage} alt="Jesusity" className="brand-logo footer-brand-logo" />
           </Link>
           <p className="footer-brand-tagline">
             Heavyweight streetwear and timeless silhouettes engineered for the endless pursuit.
@@ -141,7 +141,7 @@ export function Footer() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Supernatural on Instagram"
+              aria-label="Jesusity on Instagram"
               className="footer-social-link"
             >
               <Instagram size={17} />
@@ -150,7 +150,7 @@ export function Footer() {
               href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Supernatural on X"
+              aria-label="Jesusity on X"
               className="footer-social-link"
             >
               <Twitter size={17} />
@@ -159,7 +159,7 @@ export function Footer() {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Supernatural on Facebook"
+              aria-label="Jesusity on Facebook"
               className="footer-social-link"
             >
               <Facebook size={17} />
@@ -170,7 +170,7 @@ export function Footer() {
 
       {/* Bottom Copyright Row */}
       <div className="footer-bottom">
-        <small className="footer-copyright">© 2026 Supernatural. All Rights Reserved.</small>
+        <small className="footer-copyright">© 2026 Jesusity. All Rights Reserved.</small>
         <div className="footer-legal-links">
           <Link to="/policies/$slug" params={{ slug: "privacy" }}>
             Privacy

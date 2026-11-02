@@ -7,13 +7,13 @@ import { FeaturedProductsSection } from "../components/FeaturedProductsSection";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Supernatural Apparel | Official Store" },
+      { title: "Jesusity | Official Store" },
       {
         name: "description",
         content:
-          "Exclusive streetwear drops, graphic tees, and luxury heavyweight essentials from Supernatural.",
+          "Exclusive streetwear drops, graphic tees, and luxury heavyweight essentials from Jesusity.",
       },
-      { property: "og:title", content: "Supernatural Apparel | Official Store" },
+      { property: "og:title", content: "Jesusity | Official Store" },
       {
         property: "og:description",
         content: "Timeless style. Unmatched quality. Built for every chapter of your journey.",

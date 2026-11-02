@@ -8,11 +8,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Checkout | Supernatural Apparel" },
+      { title: "Checkout | Jesusity" },
       {
         name: "description",
         content:
-          "Secure checkout for Supernatural Apparel. Pay with Mobile Money or Credit/Debit card.",
+          "Secure checkout for Jesusity. Pay with Mobile Money or Credit/Debit card.",
       },
     ],
   }),
@@ -275,7 +275,7 @@ function CheckoutPage() {
 
               <div className="checkout-guarantee">
                 <ShieldCheck size={16} />
-                <span>256-Bit Encrypted Payment • Official Supernatural Guarantee</span>
+                <span>256-Bit Encrypted Payment • Official Jesusity Guarantee</span>
               </div>
             </div>
           </div>

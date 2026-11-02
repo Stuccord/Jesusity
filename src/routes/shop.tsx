@@ -40,11 +40,11 @@ export const Route = createFileRoute("/shop")({
   },
   head: () => ({
     meta: [
-      { title: "Graphic Tees | Supernatural Apparel" },
+      { title: "Graphic Tees | Jesusity" },
       {
         name: "description",
         content:
-          "Shop exclusive heavyweight graphic tees and luxury essentials engineered by Supernatural.",
+          "Shop exclusive heavyweight graphic tees and luxury essentials engineered by Jesusity.",
       },
     ],
   }),
@@ -178,11 +178,11 @@ function ShopPage() {
       ? "Archival and promotional graphic tees with limited remaining stock."
       : currentSort === "best-selling" || currentSort === "newest"
         ? "Our highest-rated heavyweight graphic tees and customer favorites."
-        : "The complete Supernatural graphic tee lineup. 280 GSM heavyweight drapes and limited editions.";
+        : "The complete Jesusity graphic tee lineup. 280 GSM heavyweight drapes and limited editions.";
 
   return (
     <div className="catalog-page-container">
-      <PageHeader eyebrow="SUPERNATURAL / CATALOG" title={pageTitle} subcopy={pageSubcopy} />
+      <PageHeader eyebrow="JESUSITY / CATALOG" title={pageTitle} subcopy={pageSubcopy} />
 
       <div className="catalog-toolbar">
         {/* Category & Filter Tabs */}

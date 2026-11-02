@@ -52,7 +52,7 @@ const POLICIES: Record<
   privacy: {
     title: "PRIVACY POLICY",
     eyebrow: "DATA & SECURITY",
-    subcopy: "How Supernatural collects, safeguards, and respects your personal information.",
+    subcopy: "How Jesusity collects, safeguards, and respects your personal information.",
     content: [
       {
         heading: "1. Information We Collect",
@@ -64,18 +64,18 @@ const POLICIES: Record<
       },
       {
         heading: "3. No Third-Party Selling",
-        body: "Your information is never sold, leased, or distributed to third-party advertising brokers. Data is used exclusively for Supernatural client communication and order fulfillment.",
+        body: "Your information is never sold, leased, or distributed to third-party advertising brokers. Data is used exclusively for Jesusity client communication and order fulfillment.",
       },
     ],
   },
   terms: {
     title: "TERMS & CONDITIONS",
     eyebrow: "LEGAL AGREEMENT",
-    subcopy: "Standard terms of service governing access to Supernatural digital storefront.",
+    subcopy: "Standard terms of service governing access to Jesusity digital storefront.",
     content: [
       {
         heading: "1. Overview & Acceptance",
-        body: "By accessing or purchasing from Supernatural Apparel, you agree to comply with our Terms of Service. All content, trademarks, graphics, and architectural cuts remain the intellectual property of Supernatural.",
+        body: "By accessing or purchasing from Jesusity, you agree to comply with our Terms of Service. All content, trademarks, graphics, and architectural cuts remain the intellectual property of Jesusity.",
       },
       {
         heading: "2. Limited Availability & Pricing",
@@ -96,10 +96,10 @@ export const Route = createFileRoute("/policies/$slug")({
 
     return {
       meta: [
-        { title: `${title} | Supernatural Apparel` },
+        { title: `${title} | Jesusity` },
         {
           name: "description",
-          content: policy?.subcopy || "Official Supernatural policies and guidelines.",
+          content: policy?.subcopy || "Official Jesusity policies and guidelines.",
         },
       ],
     };

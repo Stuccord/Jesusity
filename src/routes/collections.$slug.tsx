@@ -12,11 +12,11 @@ export const Route = createFileRoute("/collections/$slug")({
 
     return {
       meta: [
-        { title: `${title} | Supernatural Apparel` },
+        { title: `${title} | Jesusity` },
         {
           name: "description",
           content:
-            collection?.description || "Explore curated collections from Supernatural Apparel.",
+            collection?.description || "Explore curated collections from Jesusity.",
         },
       ],
     };

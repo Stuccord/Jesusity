@@ -6,11 +6,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/order-confirmed")({
   head: () => ({
     meta: [
-      { title: "Order Confirmed | Supernatural Apparel" },
+      { title: "Order Confirmed | Jesusity" },
       {
         name: "description",
         content:
-          "Thank you for your order with Supernatural. Your official garment is being prepared for dispatch.",
+          "Thank you for your order with Jesusity. Your official garment is being prepared for dispatch.",
       },
     ],
   }),
@@ -19,9 +19,9 @@ export const Route = createFileRoute("/order-confirmed")({
 
 function OrderConfirmedPage() {
   // Generated after mount so the server and client render the same markup.
-  const [orderNumber, setOrderNumber] = useState("SN-······");
+  const [orderNumber, setOrderNumber] = useState("JS-······");
   useEffect(() => {
-    setOrderNumber("SN-" + Math.floor(100000 + Math.random() * 900000));
+    setOrderNumber("JS-" + Math.floor(100000 + Math.random() * 900000));
   }, []);
 
   return (
@@ -36,7 +36,7 @@ function OrderConfirmedPage() {
         <div className="order-confirmed-id">ORDER REFERENCE: #{orderNumber}</div>
 
         <p className="order-confirmed-message">
-          Your allocation has been secured in the Supernatural atelier. We are currently inspecting,
+          Your allocation has been secured in the Jesusity atelier. We are currently inspecting,
           steaming, and packaging your garment with official authenticity tags.
         </p>
 

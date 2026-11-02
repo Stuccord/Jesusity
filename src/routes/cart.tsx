@@ -7,11 +7,11 @@ import { PageHeader } from "../components/common/PageHeader";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Shopping Bag | Supernatural Apparel" },
+      { title: "Shopping Bag | Jesusity" },
       {
         name: "description",
         content:
-          "Review your Supernatural luxury streetwear items, choose delivery, and proceed to checkout.",
+          "Review your Jesusity luxury streetwear items, choose delivery, and proceed to checkout.",
       },
     ],
   }),
@@ -150,7 +150,7 @@ function CartPage() {
 
             <div className="cart-perks-list">
               <div>✓ Instant Mobile Money (MTN / Telecel / AT) & Card</div>
-              <div>✓ 100% Genuine Supernatural Official Capsule</div>
+              <div>✓ 100% Genuine Jesusity Official Capsule</div>
               <div>✓ Doorstep delivery across Accra & nationwide Ghana</div>
             </div>
           </div>
