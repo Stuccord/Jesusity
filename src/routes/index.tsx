@@ -63,7 +63,11 @@ function Index() {
             className="hero-bg-image"
             data-pin-nopin="true"
           />
-          <div className="hero-spotlight" />
+          <div className="hero-spotlight">
+            <img src={heroImage} alt="" className="hero-bg-image hero-lit-image" />
+            <span className="hero-beam" />
+            <span className="hero-beam-dust" />
+          </div>
         </div>
 
         <a href="#trending" className="hero-scroll-indicator" aria-label="Scroll to trending piece">
