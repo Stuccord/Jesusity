@@ -19,6 +19,7 @@ import { CatalogProvider } from "../context/CatalogContext";
 import { getCatalog, type Catalog } from "../lib/catalog";
 import { fallbackProducts } from "../data/products";
 import { PageViewTracker } from "../components/common/PageViewTracker";
+import { AuthLinkRedirect } from "../components/common/AuthLinkRedirect";
 import { SiteLayout } from "../components/layout/SiteLayout";
 import { BrandedNotFound } from "../components/common/BrandedNotFound";
 
@@ -138,6 +139,7 @@ function RootComponent() {
       <CatalogProvider catalog={catalog}>
         <CartProvider>
           <PageViewTracker />
+          <AuthLinkRedirect />
           {isAdmin ? (
             <Outlet />
           ) : (

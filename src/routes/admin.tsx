@@ -263,10 +263,19 @@ function SetNewPassword({ supabase }: { supabase: SupabaseClient }) {
   );
 }
 
+// An expired or already-used email link comes back with an error after the #
+function emailLinkError(): string | null {
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  if (!params.has("error_description")) return null;
+  return params.get("error_code") === "otp_expired"
+    ? "That email link has expired or was already used. Enter your email and click “Forgot password” to get a new one."
+    : (params.get("error_description") ?? "That email link didn't work. Please request a new one.");
+}
+
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(emailLinkError);
   const [busy, setBusy] = useState(false);
   const [resetSent, setResetSent] = useState(false);
 

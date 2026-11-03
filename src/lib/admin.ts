@@ -49,6 +49,9 @@ export function useAdminAuth(): AdminState {
   const [state, setState] = useState<AdminState>({ status: "loading" });
 
   useEffect(() => {
+    // Read the email link before the Supabase client consumes it: an invite
+    // signs the person in without a password, so ask them to choose one
+    const linkType = new URLSearchParams(window.location.hash.slice(1)).get("type");
     const supabase = getBrowserSupabase();
     if (!supabase) {
       setState({ status: "unconfigured" });
@@ -56,7 +59,8 @@ export function useAdminAuth(): AdminState {
     }
 
     let cancelled = false;
-    let recovering = false;
+    let recovering = linkType === "invite" || linkType === "recovery";
+    if (recovering) setState({ status: "recovery", supabase });
     // Auth fires several events on load; only re-check admin rights for a new user
     let checkedUserId: string | null = null;
     const resolve = async (session: Session | null) => {
