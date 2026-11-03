@@ -56,7 +56,8 @@ export function useAdminAuth(): AdminState {
         setState({ status: "recovery", supabase });
         return;
       }
-      resolve(session);
+      // Querying Supabase inside this callback can deadlock the auth client
+      setTimeout(() => resolve(session), 0);
     });
     return () => {
       cancelled = true;
