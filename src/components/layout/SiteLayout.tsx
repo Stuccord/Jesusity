@@ -7,6 +7,7 @@ import { Footer } from "./Footer";
 import { CartDrawer } from "./CartDrawer";
 import { SearchOverlay } from "./SearchOverlay";
 import { MobileMenu } from "./MobileMenu";
+import { VipPopup } from "./VipPopup";
 import { ScrollProgressBar } from "../common/ScrollProgressBar";
 import { ScrollReveal } from "../common/ScrollReveal";
 
@@ -65,6 +66,9 @@ export function SiteLayout({ children }: SiteLayoutProps) {
         onClose={() => setIsMobileMenuOpen(false)}
         onOpenSearch={() => setIsSearchOpen(true)}
       />
+
+      {/* VIP list sign-up for first-time visitors */}
+      <VipPopup />
     </div>
   );
 }

@@ -8,6 +8,7 @@ export const STORE: {
   deliveryEstimate: string;
   returnWindowDays: number;
   maxQuantityPerItem: number;
+  vipDiscountPercent: number;
   contact: { email: string; phone: string; whatsapp: string; location: string; hours: string };
   social: { instagram: string; x: string; facebook: string; tiktok: string };
 } = {
@@ -23,6 +24,8 @@ export const STORE: {
   returnWindowDays: 14,
   /** Max units of one size per order line */
   maxQuantityPerItem: 10,
+  /** Percent off a VIP's first paid order (VIP pop-up + checkout) */
+  vipDiscountPercent: 10,
   /**
    * Public contact details shown on the contact page and footer.
    * Leave a value empty ("") to hide it.

@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Lock, ShieldCheck } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { formatGHS } from "../data/products";
 import { PageHeader } from "../components/common/PageHeader";
-import { GHANA_REGIONS, deliveryFeeFor } from "../config/store";
+import { GHANA_REGIONS, STORE, deliveryFeeFor } from "../config/store";
 import { createCheckout } from "../lib/orders";
+import { checkVipDiscount, normalizeGhanaPhone, vipDiscountFor } from "../lib/vip";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -38,9 +39,30 @@ function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // VIP list members get their discount on the first paid order with their number
+  const [vipPhone, setVipPhone] = useState<string | null>(null);
+  const normalizedPhone = normalizeGhanaPhone(contact.phone);
+  useEffect(() => {
+    if (!normalizedPhone) return;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      checkVipDiscount({ data: { phone: normalizedPhone } })
+        .then((r) => {
+          if (!cancelled) setVipPhone(r.eligible ? normalizedPhone : null);
+        })
+        .catch(() => {});
+    }, 400);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [normalizedPhone]);
+
   // Display only: the server recalculates every price and fee before charging
   const deliveryFee = deliveryFeeFor(cartSubtotal);
-  const grandTotal = cartSubtotal + deliveryFee;
+  const vipDiscount =
+    vipPhone !== null && vipPhone === normalizedPhone ? vipDiscountFor(cartSubtotal) : 0;
+  const grandTotal = cartSubtotal - vipDiscount + deliveryFee;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,6 +154,11 @@ function CheckoutPage() {
                   value={contact.phone}
                   onChange={(e) => setContact({ ...contact, phone: e.target.value })}
                 />
+                {vipDiscount > 0 && (
+                  <p className="checkout-vip-note">
+                    <CheckCircle2 size={14} /> VIP number: {STORE.vipDiscountPercent}% off applied
+                  </p>
+                )}
               </div>
             </div>
 
@@ -269,6 +296,12 @@ function CheckoutPage() {
                   <span>Subtotal</span>
                   <span>{formatGHS(cartSubtotal)}</span>
                 </div>
+                {vipDiscount > 0 && (
+                  <div className="checkout-totals-row checkout-vip-row">
+                    <span>VIP discount ({STORE.vipDiscountPercent}%)</span>
+                    <span>−{formatGHS(vipDiscount)}</span>
+                  </div>
+                )}
                 <div className="checkout-totals-row">
                   <span>Delivery</span>
                   <span>{deliveryFee === 0 ? "FREE" : formatGHS(deliveryFee)}</span>

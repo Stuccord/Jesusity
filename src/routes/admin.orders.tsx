@@ -33,6 +33,7 @@ interface OrderRow {
   region: string;
   notes: string | null;
   subtotal: number;
+  discount: number;
   delivery_fee: number;
   total: number;
   payment_reference: string | null;
@@ -120,6 +121,7 @@ function AdminOrders() {
         region: o.region,
         items: o.order_items.map((i) => `${i.quantity}x ${i.product_name} (${i.size})`).join("; "),
         subtotal: o.subtotal,
+        vip_discount: o.discount,
         delivery: o.delivery_fee,
         total: o.total,
         payment: o.payment_channel ?? "",
@@ -326,6 +328,12 @@ function OrderDetail({ order }: { order: OrderRow }) {
               <dt className="text-neutral-500">Subtotal</dt>
               <dd className="tabular-nums">{formatGHS(Number(order.subtotal))}</dd>
             </div>
+            {Number(order.discount) > 0 && (
+              <div className="flex justify-between text-green-700">
+                <dt>VIP discount</dt>
+                <dd className="tabular-nums">−{formatGHS(Number(order.discount))}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-neutral-500">Delivery</dt>
               <dd className="tabular-nums">{formatGHS(Number(order.delivery_fee))}</dd>

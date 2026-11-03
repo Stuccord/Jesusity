@@ -17,6 +17,7 @@ and checkout politely says payments aren't available yet. Nothing is faked.
 
 1. Create a project at [supabase.com](https://supabase.com). Pick the region closest to Ghana (e.g. EU West / Frankfurt).
 2. Open **SQL Editor**, paste all of `supabase/migrations/0001_store.sql`, and run it.
+   Then, in a new query, paste and run `supabase/migrations/0002_vip.sql` (VIP list + discount).
 3. In a new query, paste `supabase/seed.sql` and run it. This loads your current products.
    Every in-stock size starts at **10 units**: set your real stock in the admin dashboard afterwards.
 4. Go to **Project Settings → API** and copy:
@@ -73,6 +74,10 @@ and checkout politely says payments aren't available yet. Nothing is faked.
 - **Products**: change prices and stock, hide items, upload photos, add new products.
   Give a product the **TRENDING** badge to feature it on the homepage.
 - **Visitors**: live activity, top pages, traffic sources, countries and devices.
-- **Messages / Subscribers**: contact-form messages, newsletter sign-ups and back-in-stock
-  requests (export as CSV for your email tool).
+- **Messages / Subscribers**: contact-form messages, the VIP list (phone numbers, and whether each
+  has used their first-order discount), newsletter sign-ups and back-in-stock requests
+  (export as CSV for your SMS or email tool).
+- **VIP discount**: first-time visitors see a pop-up offering 10% off for joining with their phone
+  number. The discount applies automatically at checkout when they use that number, once per
+  number, and is only used up when payment succeeds. Change the percent in `src/config/store.ts`.
 - **Refunds** are issued from the Paystack dashboard; then set the order to *Refunded* in admin.

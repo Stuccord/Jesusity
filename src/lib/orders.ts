@@ -5,6 +5,7 @@ import { getServiceSupabase } from "./supabase/client";
 import { initializeTransaction, isPaystackConfigured, verifyTransaction } from "./paystack";
 import { PRODUCT_SELECT, type ProductRow } from "./catalog";
 import { GHANA_REGIONS, STORE, deliveryFeeFor } from "../config/store";
+import { findUnusedVip, vipDiscountFor } from "./vip";
 
 const NOT_READY = "Online checkout isn't available right now. Please try again shortly.";
 
@@ -112,7 +113,9 @@ export const createCheckout = createServerFn({ method: "POST" })
 
     const subtotal = orderItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
     const deliveryFee = deliveryFeeFor(subtotal);
-    const total = subtotal + deliveryFee;
+    const vip = await findUnusedVip(supabase, data.phone);
+    const discount = vip ? vipDiscountFor(subtotal) : 0;
+    const total = subtotal - discount + deliveryFee;
     const reference = newReference();
 
     const { data: order, error: orderError } = await supabase
@@ -128,6 +131,8 @@ export const createCheckout = createServerFn({ method: "POST" })
         notes: data.notes || null,
         subtotal,
         delivery_fee: deliveryFee,
+        discount,
+        vip_member_id: vip?.id ?? null,
         total,
       })
       .select("id")
@@ -211,6 +216,7 @@ export interface PublicOrder {
   createdAt: string;
   firstName: string;
   subtotal: number;
+  discount: number;
   deliveryFee: number;
   total: number;
   city: string;
@@ -225,7 +231,7 @@ async function loadPublicOrder(reference: string): Promise<(PublicOrder & { emai
   const { data } = await supabase
     .from("orders")
     .select(
-      "reference, status, created_at, customer_name, email, phone, city, region, subtotal, delivery_fee, total, order_items(product_name, colorway, size, quantity, unit_price, image), order_events(status, note, created_at)",
+      "reference, status, created_at, customer_name, email, phone, city, region, subtotal, discount, delivery_fee, total, order_items(product_name, colorway, size, quantity, unit_price, image), order_events(status, note, created_at)",
     )
     .eq("reference", reference)
     .maybeSingle();
@@ -238,6 +244,7 @@ async function loadPublicOrder(reference: string): Promise<(PublicOrder & { emai
     email: data.email,
     phone: data.phone,
     subtotal: Number(data.subtotal),
+    discount: Number(data.discount),
     deliveryFee: Number(data.delivery_fee),
     total: Number(data.total),
     city: data.city,

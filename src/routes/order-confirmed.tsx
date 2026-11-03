@@ -114,6 +114,12 @@ function OrderConfirmedPage() {
               <span className="order-detail-value">{formatGHS(item.unitPrice * item.quantity)}</span>
             </div>
           ))}
+          {order.discount > 0 && (
+            <div className="order-detail-row">
+              <span className="order-detail-label">VIP discount</span>
+              <span className="order-detail-value">−{formatGHS(order.discount)}</span>
+            </div>
+          )}
           <div className="order-detail-row">
             <span className="order-detail-label">Delivery</span>
             <span className="order-detail-value">
