@@ -36,7 +36,7 @@ export const joinVip = createServerFn({ method: "POST" })
     z
       .object({
         phone: z.string().trim().max(30),
-        email: z.string().trim().email().max(200).optional(),
+        email: z.string().trim().email().max(200),
         // Honeypot: real visitors never see or fill this field
         website: z.string().max(0).optional(),
       })
@@ -48,13 +48,11 @@ export const joinVip = createServerFn({ method: "POST" })
     const supabase = getServiceSupabase();
     if (!supabase) return { ok: false, error: "The VIP list isn't available right now. Please try again shortly." };
 
-    const email = data.email?.toLowerCase() ?? null;
+    const email = data.email.toLowerCase();
     const { error } = await supabase.from("vip_members").insert({ phone, email });
     if (error?.code === "23505") {
-      // Already on the list: keep their discount as is, just add an email if new
-      if (email) {
-        await supabase.from("vip_members").update({ email }).eq("phone", phone).is("email", null);
-      }
+      // Already on the list: keep their discount as is, just add an email if missing
+      await supabase.from("vip_members").update({ email }).eq("phone", phone).is("email", null);
       return { ok: true, alreadyMember: true };
     }
     if (error) {

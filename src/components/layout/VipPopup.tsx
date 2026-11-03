@@ -71,11 +71,15 @@ export function VipPopup() {
       setError("Enter a valid Ghana phone number, e.g. 024 123 4567.");
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("Enter a valid email address.");
+      return;
+    }
     setStatus("sending");
     setError(null);
     try {
       const result = await joinVip({
-        data: { phone, email: email.trim() || undefined, website: website || undefined },
+        data: { phone, email: email.trim(), website: website || undefined },
       });
       if (!result.ok) {
         setError(result.error);
@@ -139,13 +143,12 @@ export function VipPopup() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
-              <label htmlFor="vip-email">
-                Email <span className="vip-optional">(optional)</span>
-              </label>
+              <label htmlFor="vip-email">Email *</label>
               <input
                 id="vip-email"
                 type="email"
                 autoComplete="email"
+                required
                 placeholder="name@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

@@ -1,4 +1,4 @@
--- VIP list: visitors join with their phone number (email optional) and get
+-- VIP list: visitors join with their phone number and email, and get
 -- 10% off their first paid order placed with that number.
 -- Run once in Supabase > SQL Editor after 0001_store.sql. Safe to re-run.
 

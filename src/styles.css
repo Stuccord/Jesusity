@@ -11211,10 +11211,6 @@ footer.site-footer {
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-.vip-optional {
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.5);
-}
 .vip-form input {
   width: 100%;
   margin-bottom: 16px;
