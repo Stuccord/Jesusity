@@ -5,7 +5,7 @@ import { STORE } from "../../config/store";
 import { joinVip, normalizeGhanaPhone } from "../../lib/vip";
 
 const STORAGE_KEY = "jesusity_vip";
-const SHOW_AFTER_MS = 6000;
+const SHOW_AFTER_MS = 1000;
 const DISMISS_DAYS = 7;
 // Don't interrupt people who are already paying
 const HIDDEN_ON = ["/checkout", "/cart", "/order-confirmed"];
