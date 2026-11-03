@@ -2,19 +2,35 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Facebook, Instagram, Twitter } from "lucide-react";
 import logoImage from "../../assets/logo.png";
+import { STORE } from "../../config/store";
+import { subscribe } from "../../lib/inbound";
+
+const SOCIAL_LINKS = [
+  { key: "instagram", label: "Instagram", Icon: Instagram },
+  { key: "x", label: "X", Icon: Twitter },
+  { key: "facebook", label: "Facebook", Icon: Facebook },
+] as const;
 
 export function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const [subscribeError, setSubscribeError] = useState<string | null>(null);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setTimeout(() => {
+    if (!email.trim()) return;
+    setSubscribeError(null);
+    try {
+      const result = await subscribe({ data: { email, source: "newsletter" } });
+      if (result.ok) {
+        setSubscribed(true);
         setEmail("");
-        setSubscribed(false);
-      }, 3500);
+      } else {
+        setSubscribeError(result.error);
+      }
+    } catch {
+      setSubscribeError("Please enter a valid email address.");
     }
   };
 
@@ -135,42 +151,32 @@ export function Footer() {
             </button>
           </form>
 
-          {/* Social Icons */}
-          <div className="footer-social-row">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Jesusity on Instagram"
-              className="footer-social-link"
-            >
-              <Instagram size={17} />
-            </a>
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Jesusity on X"
-              className="footer-social-link"
-            >
-              <Twitter size={17} />
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Jesusity on Facebook"
-              className="footer-social-link"
-            >
-              <Facebook size={17} />
-            </a>
-          </div>
+          {subscribeError && <p className="footer-newsletter-error">{subscribeError}</p>}
+          {subscribed && <p className="footer-newsletter-copy">You're subscribed. Thank you!</p>}
+
+          {/* Social Icons (only accounts set in src/config/store.ts) */}
+          {SOCIAL_LINKS.some(({ key }) => STORE.social[key]) && (
+            <div className="footer-social-row">
+              {SOCIAL_LINKS.filter(({ key }) => STORE.social[key]).map(({ key, label, Icon }) => (
+                <a
+                  key={key}
+                  href={STORE.social[key]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Jesusity on ${label}`}
+                  className="footer-social-link"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Bottom Copyright Row */}
       <div className="footer-bottom">
-        <small className="footer-copyright">© 2026 Jesusity. All Rights Reserved.</small>
+        <small className="footer-copyright">© {new Date().getFullYear()} Jesusity. All Rights Reserved.</small>
         <div className="footer-legal-links">
           <Link to="/policies/$slug" params={{ slug: "privacy" }}>
             Privacy

@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { getProductBySlug, getRelatedProducts, type Product } from "../data/products";
+import {
+  fallbackProducts,
+  getProductBySlug,
+  getRelatedProducts,
+  type Product,
+} from "../data/products";
+import type { Catalog } from "../lib/catalog";
+import { useProducts } from "../context/CatalogContext";
 import { BrandedNotFound } from "../components/common/BrandedNotFound";
 import { ProductGallery } from "../components/pdp/ProductGallery";
 import { ProductBuyBox } from "../components/pdp/ProductBuyBox";
@@ -10,9 +17,14 @@ import { SizeGuideModal } from "../components/pdp/SizeGuideModal";
 import { ProductStickyMobileBar } from "../components/pdp/ProductStickyMobileBar";
 import { FeaturedProductsSection } from "../components/FeaturedProductsSection";
 
+function rootCatalog(matches: { routeId: string; loaderData?: unknown }[]): Product[] {
+  const root = matches.find((m) => m.routeId === "__root__")?.loaderData as Catalog | undefined;
+  return root?.products ?? fallbackProducts;
+}
+
 export const Route = createFileRoute("/products/$slug")({
-  head: ({ params }) => {
-    const product = getProductBySlug(params.slug);
+  head: ({ params, matches }) => {
+    const product = getProductBySlug(rootCatalog(matches), params.slug);
     if (!product) {
       return {
         meta: [
@@ -42,7 +54,8 @@ export const Route = createFileRoute("/products/$slug")({
 
 function ProductDetailPage() {
   const { slug } = Route.useParams();
-  const product = getProductBySlug(slug);
+  const products = useProducts();
+  const product = getProductBySlug(products, slug);
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
@@ -73,7 +86,7 @@ function ProductDetailPage() {
     setTimeout(() => setShakeSize(false), 500);
   };
 
-  const relatedProducts = getRelatedProducts(product, 4);
+  const relatedProducts = getRelatedProducts(products, product, 4);
 
   // Structured Data (JSON-LD)
   const isAvailable = product.sizes.some((s) => s.inStock) && product.badge !== "SOLD OUT";

@@ -4,14 +4,14 @@ import { Link } from "@tanstack/react-router";
 export function UtilityBar() {
   return (
     <div className="utility-bar">
-      <nav className="utility-links" aria-label="Help and account">
+      <nav className="utility-links" aria-label="Help links">
         <Link to="/track">Track Order</Link>
         <span aria-hidden="true">|</span>
         <Link to="/faq">Help</Link>
         <span aria-hidden="true">|</span>
         <Link to="/contact">Contact</Link>
         <span aria-hidden="true">|</span>
-        <Link to="/account">Sign In</Link>
+        <Link to="/wishlist">Wishlist</Link>
       </nav>
     </div>
   );

@@ -1,12 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { getCollections, getProductsByCollection } from "../data/products";
+import {
+  fallbackProducts,
+  getCollections,
+  getProductsByCollection,
+  type Product,
+} from "../data/products";
+import type { Catalog } from "../lib/catalog";
+import { useProducts } from "../context/CatalogContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ProductCard } from "../components/common/ProductCard";
 import { ArrowLeft } from "lucide-react";
 
+function rootCatalog(matches: { routeId: string; loaderData?: unknown }[]): Product[] {
+  const root = matches.find((m) => m.routeId === "__root__")?.loaderData as Catalog | undefined;
+  return root?.products ?? fallbackProducts;
+}
+
 export const Route = createFileRoute("/collections/$slug")({
-  head: ({ params }) => {
-    const collections = getCollections();
+  head: ({ params, matches }) => {
+    const collections = getCollections(rootCatalog(matches));
     const collection = collections.find((c) => c.slug === params.slug);
     const title = collection ? `${collection.name} Collection` : "Collection Not Found";
 
@@ -26,9 +38,10 @@ export const Route = createFileRoute("/collections/$slug")({
 
 function CollectionDetailPage() {
   const { slug } = Route.useParams();
-  const collections = getCollections();
+  const products = useProducts();
+  const collections = getCollections(products);
   const collection = collections.find((c) => c.slug === slug);
-  const collectionProducts = getProductsByCollection(slug);
+  const collectionProducts = getProductsByCollection(products, slug);
 
   if (!collection) {
     return (

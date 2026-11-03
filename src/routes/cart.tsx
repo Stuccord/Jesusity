@@ -19,7 +19,7 @@ export const Route = createFileRoute("/cart")({
 });
 
 function CartPage() {
-  const { items, cartCount, cartSubtotal, updateQuantity, removeFromCart } = useCart();
+  const { items, cartCount, cartSubtotal, updateQuantity, removeFromCart, isCartReady } = useCart();
 
   return (
     <div className="cart-page-container">
@@ -29,7 +29,7 @@ function CartPage() {
         subcopy={`${cartCount} ${cartCount === 1 ? "item" : "items"} selected for dispatch.`}
       />
 
-      {items.length === 0 ? (
+      {!isCartReady ? null : items.length === 0 ? (
         <div className="cart-page-empty">
           <div className="cart-empty-icon">
             <ShoppingBag size={48} strokeWidth={1.2} />

@@ -6,6 +6,8 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useMatch,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -13,16 +15,26 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { CartProvider } from "../context/CartContext";
+import { CatalogProvider } from "../context/CatalogContext";
+import { getCatalog, type Catalog } from "../lib/catalog";
+import { fallbackProducts } from "../data/products";
+import { PageViewTracker } from "../components/common/PageViewTracker";
 import { SiteLayout } from "../components/layout/SiteLayout";
 import { BrandedNotFound } from "../components/common/BrandedNotFound";
 
+const EMPTY_CATALOG: Catalog = { products: fallbackProducts, live: false };
+
 function NotFoundComponent() {
+  const rootMatch = useMatch({ from: "__root__", shouldThrow: false });
+  const catalog = (rootMatch?.loaderData as Catalog | undefined) ?? EMPTY_CATALOG;
   return (
-    <CartProvider>
-      <SiteLayout>
-        <BrandedNotFound />
-      </SiteLayout>
-    </CartProvider>
+    <CatalogProvider catalog={catalog}>
+      <CartProvider>
+        <SiteLayout>
+          <BrandedNotFound />
+        </SiteLayout>
+      </CartProvider>
+    </CatalogProvider>
   );
 }
 
@@ -78,7 +90,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Jesusity" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -94,6 +105,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
+  // The storefront catalog (products, prices, stock) loads once and refreshes every minute
+  loader: () => getCatalog(),
+  staleTime: 60_000,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -116,15 +130,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const catalog = Route.useLoaderData();
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <SiteLayout>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </SiteLayout>
-      </CartProvider>
+      <CatalogProvider catalog={catalog}>
+        <CartProvider>
+          <PageViewTracker />
+          {isAdmin ? (
+            <Outlet />
+          ) : (
+            <SiteLayout>
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <Outlet />
+            </SiteLayout>
+          )}
+        </CartProvider>
+      </CatalogProvider>
     </QueryClientProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
 import { ArrowRight, Search, X } from "lucide-react";
+import { useProducts } from "../../context/CatalogContext";
 import { searchProducts, formatGHS, type Product } from "../../data/products";
 
 interface SearchOverlayProps {
@@ -9,6 +10,7 @@ interface SearchOverlayProps {
 }
 
 export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+  const products = useProducts();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Product[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -38,9 +40,9 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       setResults([]);
       return;
     }
-    const matches = searchProducts(query);
+    const matches = searchProducts(products, query);
     setResults(matches);
-  }, [query]);
+  }, [query, products]);
 
   // Handle keys (Escape to close, Enter to navigate to /search?q=...)
   const handleKeyDown = (e: React.KeyboardEvent) => {

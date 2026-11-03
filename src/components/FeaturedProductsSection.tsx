@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ArrowLeft, ArrowRight, Check, Heart, Plus, Star } from "lucide-react";
-import { products, formatGHS, type Product } from "../data/products";
+import { ArrowLeft, ArrowRight, Check, Heart, Plus } from "lucide-react";
+import { formatGHS, type Product } from "../data/products";
+import { useProducts } from "../context/CatalogContext";
 import { useCart } from "../context/CartContext";
 
 export interface FeaturedProductsSectionProps {
@@ -12,12 +13,14 @@ export interface FeaturedProductsSectionProps {
 }
 
 export function FeaturedProductsSection({
-  productsList = products,
+  productsList: productsListProp,
   title = "FEATURED PRODUCTS",
   eyebrow = "THE COLLECTION",
   subcopy = "Heavyweight cotton. Scripture-inspired graphics. Limited drops.",
   viewAllLink = "/shop",
 }: FeaturedProductsSectionProps = {}) {
+  const catalogProducts = useProducts();
+  const productsList = productsListProp ?? catalogProducts;
   const { addToCart } = useCart();
   const railRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -289,7 +292,8 @@ export function FeaturedProductsSection({
           {productsList.map((product, index) => {
             const isWishlisted = wishlist.includes(product.id);
             const isHeartPopping = poppingHeartId === product.id;
-            const isSoldOut = product.badge === "SOLD OUT";
+            const isSoldOut =
+              product.badge === "SOLD OUT" || product.sizes.every((s) => !s.inStock);
             const isTouchQuickAddOpen = mobileQuickAddId === product.id;
 
             return (
@@ -432,22 +436,6 @@ export function FeaturedProductsSection({
                       </div>
                     )}
                   </div>
-
-                  {/* Rating row: only rendered if reviewCount > 0 */}
-                  {product.reviewCount && product.reviewCount > 0 && (
-                    <div className="featured-card-rating-row">
-                      <Star
-                        size={12}
-                        fill="#000000"
-                        stroke="#000000"
-                        className="featured-gold-star"
-                      />
-                      <span className="featured-rating-score">
-                        {product.rating?.toFixed(1) ?? "5.0"}
-                      </span>
-                      <span className="featured-rating-count">({product.reviewCount})</span>
-                    </div>
-                  )}
                 </div>
               </a>
             );

@@ -4,7 +4,6 @@ import { PageHeader } from "../components/common/PageHeader";
 import heroImage from "../assets/hero-thorns.jpg";
 import thornyCrownBlackWhite from "../assets/products/thorny-crown-black-white.jpg";
 import thornyCrownWhiteBold from "../assets/products/thorny-crown-white-bold.jpg";
-import { products } from "../data/products";
 
 export const Route = createFileRoute("/lookbook")({
   head: () => ({

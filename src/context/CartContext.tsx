@@ -18,6 +18,8 @@ interface CartContextType {
   cartSubtotal: number;
   isCartOpen: boolean;
   cartBump: boolean;
+  /** false until the saved bag has been read from this device */
+  isCartReady: boolean;
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
@@ -45,27 +47,32 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const STORAGE_KEY = "supernatural_cart_v1";
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window === "undefined") return [];
+  const [items, setItems] = useState<CartItem[]>([]);
+  // The saved bag is read after mount so the server and first client render match
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      if (saved) setItems(JSON.parse(saved));
     } catch {
-      return [];
+      // ignore unreadable storage
     }
-  });
+    setHasLoaded(true);
+  }, []);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartBump, setCartBump] = useState(false);
 
   // Sync to localStorage
   useEffect(() => {
+    if (!hasLoaded) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {
       // ignore storage write errors
     }
-  }, [items]);
+  }, [items, hasLoaded]);
 
   const triggerBump = useCallback(() => {
     setCartBump(true);
@@ -157,6 +164,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => {
     setItems([]);
+    try {
+      // Also clear storage now, in case the saved bag hasn't been loaded yet
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore storage errors
+    }
   }, []);
 
   // Listen for legacy or external cart-item-added events
@@ -178,6 +191,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     <CartContext.Provider
       value={{
         items,
+        isCartReady: hasLoaded,
         cartCount,
         cartSubtotal,
         isCartOpen,

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { products, getCollections, type Product } from "../data/products";
+import { getCollections, type Product } from "../data/products";
+import { useProducts } from "../context/CatalogContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ProductCard } from "../components/common/ProductCard";
 import { SlidersHorizontal } from "lucide-react";
@@ -54,7 +55,8 @@ export const Route = createFileRoute("/shop")({
 function ShopPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const collections = getCollections();
+  const products = useProducts();
+  const collections = getCollections(products);
 
   const currentCategory = search.category?.toLowerCase();
   const currentCollection = search.collection?.toLowerCase();
@@ -84,9 +86,10 @@ function ShopPage() {
     switch (currentSort) {
       case "best-selling":
       default:
+        // Real sales first, then the admin's badges as a tie-breaker
         list.sort((a, b) => {
-          const aScore = (a.badge === "BEST SELLER" ? 2 : 0) + (a.badge === "TRENDING" ? 1 : 0) + (a.reviewCount || 0);
-          const bScore = (b.badge === "BEST SELLER" ? 2 : 0) + (b.badge === "TRENDING" ? 1 : 0) + (b.reviewCount || 0);
+          const aScore = (a.unitsSold || 0) * 10 + (a.badge === "BEST SELLER" ? 2 : 0) + (a.badge === "TRENDING" ? 1 : 0);
+          const bScore = (b.unitsSold || 0) * 10 + (b.badge === "BEST SELLER" ? 2 : 0) + (b.badge === "TRENDING" ? 1 : 0);
           return bScore - aScore;
         });
         break;
@@ -102,7 +105,7 @@ function ShopPage() {
     }
 
     return list;
-  }, [currentCollection, currentCategory, currentFilter, currentSort]);
+  }, [products, currentCollection, currentCategory, currentFilter, currentSort]);
 
   const handleFilterAll = () => {
     navigate({

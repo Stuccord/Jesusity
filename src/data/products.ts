@@ -1,17 +1,19 @@
-import teeValuableFishFront from "../assets/products/tee-valuable-fish-front.png";
-import teeValuableFishBack from "../assets/products/tee-valuable-fish-back.png";
-import supernaturalBlackFrontTransparent from "../assets/products/supernatural-black-front-transparent.png";
-import supernaturalBlackBackTransparent from "../assets/products/supernatural-black-back-transparent.png";
-import supernaturalLogoWhiteFrontTransparent from "../assets/products/supernatural-logo-white-front-transparent.png";
-import supernaturalLogoBlackFrontTransparent from "../assets/products/supernatural-logo-black-front-transparent.png";
-import thornyCrownBlackWhite from "../assets/products/thorny-crown-black-white.jpg";
-import thornyCrownWhiteBold from "../assets/products/thorny-crown-white-bold.jpg";
-import thornyCrownBlackTonal from "../assets/products/thorny-crown-black-tonal.jpg";
-import thornyCrownWhiteTonal from "../assets/products/thorny-crown-white-tonal.jpg";
+const teeValuableFishFront = "/products/tee-valuable-fish-front.png";
+const teeValuableFishBack = "/products/tee-valuable-fish-back.png";
+const supernaturalBlackFrontTransparent = "/products/supernatural-black-front-transparent.png";
+const supernaturalBlackBackTransparent = "/products/supernatural-black-back-transparent.png";
+const supernaturalLogoWhiteFrontTransparent = "/products/supernatural-logo-white-front-transparent.png";
+const supernaturalLogoBlackFrontTransparent = "/products/supernatural-logo-black-front-transparent.png";
+const thornyCrownBlackWhite = "/products/thorny-crown-black-white.jpg";
+const thornyCrownWhiteBold = "/products/thorny-crown-white-bold.jpg";
+const thornyCrownBlackTonal = "/products/thorny-crown-black-tonal.jpg";
+const thornyCrownWhiteTonal = "/products/thorny-crown-white-tonal.jpg";
 
 export interface ProductSize {
   label: string;
   inStock: boolean;
+  /** Units on hand, when the catalog comes from the database */
+  stock?: number;
 }
 
 export interface ProductSwatch {
@@ -65,9 +67,8 @@ export interface Product {
   defaultView: "front" | "back";
   sizes: ProductSize[];
   swatches?: ProductSwatch[];
-  rating?: number;
-  reviewCount?: number;
-  reviewsVerified?: boolean;
+  /** Units sold in paid orders, used for the "best selling" sort */
+  unitsSold?: number;
   story?: ProductStory;
   details?: ProductDetails;
   sizeChart?: ProductSizeMeasurement[];
@@ -110,7 +111,10 @@ const standardJacketSizeChart: ProductSizeMeasurement[] = [
   { size: "XXL", chest: 142, length: 80, shoulder: 58, sleeve: 68 },
 ];
 
-export const products: Product[] = [
+// Launch catalog. Seeds the database (supabase/seed.sql) and is what the site
+// shows until Supabase is connected. Once connected, the database is the source
+// of truth and admins manage products from /admin.
+export const fallbackProducts: Product[] = [
   {
     id: "valuable-fish-vintage-black",
     slug: "valuable-fish-tee-vintage-black",
@@ -458,6 +462,7 @@ export const products: Product[] = [
   },
 ];
 
+
 export interface CollectionInfo {
   name: string;
   slug: string;
@@ -465,7 +470,9 @@ export interface CollectionInfo {
   count: number;
 }
 
-export const getCategories = (): { name: string; slug: string; count: number }[] => {
+export const getCategories = (
+  products: Product[],
+): { name: string; slug: string; count: number }[] => {
   const counts = new Map<string, number>();
   products.forEach((p) => {
     if (p.category) {
@@ -479,7 +486,7 @@ export const getCategories = (): { name: string; slug: string; count: number }[]
   }));
 };
 
-export const getCollections = (): CollectionInfo[] => {
+export const getCollections = (products: Product[]): CollectionInfo[] => {
   const map = new Map<string, { name: string; count: number; desc: string }>();
   products.forEach((p) => {
     if (p.collection && p.collectionSlug) {
@@ -503,15 +510,15 @@ export const getCollections = (): CollectionInfo[] => {
   }));
 };
 
-export const hasSaleProducts = (): boolean => {
+export const hasSaleProducts = (products: Product[]): boolean => {
   return products.some((p) => Boolean(p.compareAtPrice && p.compareAtPrice > p.price));
 };
 
-export const getProductBySlug = (slug: string): Product | undefined => {
+export const getProductBySlug = (products: Product[], slug: string): Product | undefined => {
   return products.find((p) => p.slug === slug || p.id === slug);
 };
 
-export const getProductsByCollection = (collectionSlug: string): Product[] => {
+export const getProductsByCollection = (products: Product[], collectionSlug: string): Product[] => {
   return products.filter((p) => p.collectionSlug === collectionSlug);
 };
 
@@ -531,10 +538,10 @@ export const getProductImages = (product: Product): string[] => {
   return Array.from(set);
 };
 
-export const getRelatedProducts = (product: Product, limit = 4): Product[] => {
+export const getRelatedProducts = (products: Product[], product: Product, limit = 4): Product[] => {
   if (product.relatedSlugs && product.relatedSlugs.length > 0) {
     const matched = product.relatedSlugs
-      .map((slug) => getProductBySlug(slug))
+      .map((slug) => getProductBySlug(products, slug))
       .filter((p): p is Product => Boolean(p && p.id !== product.id));
     if (matched.length >= limit) return matched.slice(0, limit);
     // Fill remaining with other products
@@ -546,7 +553,7 @@ export const getRelatedProducts = (product: Product, limit = 4): Product[] => {
   return products.filter((p) => p.id !== product.id).slice(0, limit);
 };
 
-export const searchProducts = (query: string): Product[] => {
+export const searchProducts = (products: Product[], query: string): Product[] => {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   return products.filter(

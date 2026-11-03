@@ -23,15 +23,15 @@ const FAQ_ITEMS = [
     questions: [
       {
         q: "What payment methods are supported?",
-        a: "We support instant Mobile Money (MTN MoMo, Telecel Cash, AT Money) via automated prompt on your mobile phone, as well as Visa, Mastercard, and international debit/credit cards with 3D Secure authentication.",
+        a: "Payments are processed securely by Paystack. You can pay with Mobile Money (MTN MoMo, Telecel Cash, AirtelTigo Money) by approving a prompt on your phone, or with a Visa or Mastercard debit/credit card.",
       },
       {
         q: "Can I cancel or modify my order after placing it?",
-        a: "Because all pieces are prepared for dispatch rapidly from our Accra fulfillment studio, modifications must be requested within 1 hour of placing the order via our Contact concierge or WhatsApp.",
+        a: "Contact us as soon as possible with your order reference. We can change or cancel orders that haven't been dispatched yet.",
       },
       {
         q: "Do you offer cash on delivery (COD)?",
-        a: "To ensure safety and reservation of limited capsule pieces, all orders must be secured online via Mobile Money or Card prior to rider dispatch.",
+        a: "Not at the moment. All orders are paid online with Mobile Money or card before dispatch, which reserves your size.",
       },
     ],
   },
@@ -39,16 +39,16 @@ const FAQ_ITEMS = [
     category: "DELIVERY & DISPATCH",
     questions: [
       {
-        q: "How fast is delivery in Accra?",
-        a: "Orders placed before 1:00 PM are dispatched same-day via express motorbike courier. All other orders arrive next business day. Orders over GH₵500 receive free doorstep delivery in Accra.",
+        q: "How fast is delivery?",
+        a: "Delivery in Accra takes 1–2 business days; other regions take 2–5 business days. Orders of GH₵500 or more ship free; otherwise delivery is GH₵35. You can follow your order on the Track Order page using your order reference.",
       },
       {
         q: "Do you ship nationwide across Ghana?",
-        a: "Yes. For Kumasi, Takoradi, Tamale, and other regional cities, packages are dispatched via VIP / FedEx parcel services and typically arrive within 2–3 business days.",
+        a: "Yes, we deliver to all 16 regions of Ghana.",
       },
       {
         q: "Is international delivery available?",
-        a: "Yes, we ship globally via DHL Express. International transit times typically range from 3 to 6 business days.",
+        a: "Not yet. We currently deliver within Ghana only.",
       },
     ],
   },

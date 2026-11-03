@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Mail, MapPin, MessageSquare, Phone } from "lucide-react";
+import { Check, Mail, MapPin, Phone } from "lucide-react";
 import { PageHeader } from "../components/common/PageHeader";
+import { STORE } from "../config/store";
+import { CONTACT_SUBJECTS, sendContactMessage } from "../lib/inbound";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -10,7 +12,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Get in touch with the Jesusity concierge team for order inquiries, bespoke requests, and showroom appointments in Accra.",
+          "Get in touch with Jesusity about orders, sizing, delivery and collaborations.",
       },
     ],
   }),
@@ -19,68 +21,105 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    subject: (typeof CONTACT_SUBJECTS)[number];
+    message: string;
+    website: string;
+  }>({
     name: "",
     email: "",
     subject: "Order Inquiry",
     message: "",
+    website: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", email: "", subject: "Order Inquiry", message: "" });
-    }, 4000);
+    setIsSending(true);
+    setError(null);
+    try {
+      const result = await sendContactMessage({ data: formData });
+      if (result.ok) setSubmitted(true);
+      else setError(result.error);
+    } catch {
+      setError("Please check your name, email and message, then try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
+
+  const { email, phone, whatsapp, location, hours } = STORE.contact;
 
   return (
     <div className="contact-page-container">
       <PageHeader
         eyebrow="CLIENT CONCIERGE"
         title="GET IN TOUCH"
-        subcopy="Direct inquiries, showroom fittings, and order assistance from our Accra atelier."
+        subcopy="Questions about an order, sizing or delivery? We're here to help."
       />
 
       <div className="contact-grid">
         {/* Left Column: Direct Info Cards */}
         <div className="contact-info-cards">
-          <div className="contact-info-card">
-            <MapPin size={22} className="text-[#111111]" />
-            <h3>ACCRA ATELIER</h3>
-            <p>14 Ring Road Central, Osu / Danquah District</p>
-            <p className="contact-subtext">Accra, Greater Accra, Ghana</p>
-          </div>
+          {location && (
+            <div className="contact-info-card">
+              <MapPin size={22} className="text-[#111111]" />
+              <h3>BASED IN</h3>
+              <p>{location}</p>
+              <p className="contact-subtext">Delivering across Ghana</p>
+            </div>
+          )}
 
-          <div className="contact-info-card">
-            <Mail size={22} className="text-[#111111]" />
-            <h3>ELECTRONIC INQUIRIES</h3>
-            <p>concierge@jesusity.com</p>
-            <p className="contact-subtext">Responses dispatched within 4 hours</p>
-          </div>
+          {email && (
+            <div className="contact-info-card">
+              <Mail size={22} className="text-[#111111]" />
+              <h3>EMAIL</h3>
+              <p>
+                <a href={`mailto:${email}`}>{email}</a>
+              </p>
+              {hours && <p className="contact-subtext">{hours}</p>}
+            </div>
+          )}
 
-          <div className="contact-info-card">
-            <Phone size={22} className="text-[#111111]" />
-            <h3>DIRECT / WHATSAPP</h3>
-            <p>+233 (0) 54 892 0192</p>
-            <p className="contact-subtext">Monday – Saturday: 9:00 AM – 7:00 PM GMT</p>
-          </div>
+          {(phone || whatsapp) && (
+            <div className="contact-info-card">
+              <Phone size={22} className="text-[#111111]" />
+              <h3>{whatsapp ? "PHONE / WHATSAPP" : "PHONE"}</h3>
+              {phone && (
+                <p>
+                  <a href={`tel:${phone.replace(/\s/g, "")}`}>{phone}</a>
+                </p>
+              )}
+              {whatsapp && (
+                <p>
+                  <a
+                    href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Chat on WhatsApp
+                  </a>
+                </p>
+              )}
+              {hours && <p className="contact-subtext">{hours}</p>}
+            </div>
+          )}
         </div>
 
         {/* Right Column: Contact Form */}
         <div className="contact-form-card">
-          <h3>DISPATCH AN INQUIRY</h3>
-          <p>Complete the form below and an atelier concierge will follow up promptly.</p>
+          <h3>SEND US A MESSAGE</h3>
+          <p>Fill in the form and we'll reply by email.</p>
 
           {submitted ? (
             <div className="contact-success-box">
               <Check size={28} className="text-[#111111]" />
-              <h4>MESSAGE TRANSMITTED</h4>
-              <p>
-                Thank you for reaching out. We have logged your request and will respond via email
-                shortly.
-              </p>
+              <h4>MESSAGE SENT</h4>
+              <p>Thanks for reaching out. We'll reply to {formData.email} as soon as we can.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="contact-form">
@@ -113,12 +152,18 @@ function ContactPage() {
                 <select
                   id="contact-subject"
                   value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      subject: e.target.value as (typeof CONTACT_SUBJECTS)[number],
+                    })
+                  }
                 >
-                  <option value="Order Inquiry">Order Inquiry & Tracking</option>
-                  <option value="Sizing Advice">Sizing & Fit Advice</option>
-                  <option value="Wholesale / Press">Wholesale, Collabs & Press</option>
-                  <option value="Other">General Question</option>
+                  {CONTACT_SUBJECTS.map((subject) => (
+                    <option key={subject} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -128,14 +173,32 @@ function ContactPage() {
                   id="contact-message"
                   required
                   rows={5}
-                  placeholder="How can we assist you with Jesusity garments?"
+                  placeholder="How can we help?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />
               </div>
 
-              <button type="submit" className="contact-submit-btn">
-                TRANSMIT INQUIRY
+              {/* Spam trap, hidden from people */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1 }}
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              />
+
+              {error && (
+                <p className="checkout-error" role="alert">
+                  {error}
+                </p>
+              )}
+
+              <button type="submit" className="contact-submit-btn" disabled={isSending}>
+                {isSending ? "SENDING..." : "SEND MESSAGE"}
               </button>
             </form>
           )}

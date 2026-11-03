@@ -1,13 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Check, Search, Shirt, Sparkles, Truck, X } from "lucide-react";
-import { formatGHS, products } from "../data/products";
-import teeFront from "../assets/products/tee-valuable-fish-front.png";
-import teeBack from "../assets/products/tee-valuable-fish-back.png";
+import { Link } from "@tanstack/react-router";
+import { formatGHS } from "../data/products";
+import { useProducts } from "../context/CatalogContext";
+import { useCart } from "../context/CartContext";
 
-const SIZES = ["S", "M", "L", "XL", "XXL"] as const;
-type Size = (typeof SIZES)[number];
+type Size = string;
 
 export function TrendingItemSection() {
+  const products = useProducts();
+  const { addToCart, openCart } = useCart();
+  // The admin picks the spotlight product by giving it the TRENDING badge
+  const product = products.find((p) => p.badge === "TRENDING") ?? products[0];
+  const teeFront = product?.images.gallery?.[0] ?? product?.images.front ?? "";
+  const teeBack = product?.images.gallery?.[1] ?? product?.images.back ?? teeFront;
+  const sizes = product?.sizes ?? [];
+
   const [activeSide, setActiveSide] = useState<"front" | "back">("front");
   const [displayedSide, setDisplayedSide] = useState<"front" | "back">("front");
   const [turnPhase, setTurnPhase] = useState<"idle" | "out" | "in">("idle");
@@ -29,11 +37,14 @@ export function TrendingItemSection() {
   const touchStartX = useRef<number | null>(null);
 
   const handleAddToCart = () => {
+    if (!product) return;
     if (!selectedSize) {
       setShakeSizeRow(true);
       setTimeout(() => setShakeSizeRow(false), 500);
       return;
     }
+    addToCart(product, selectedSize, 1);
+    openCart();
     setIsAddedToCart(true);
     setTimeout(() => setIsAddedToCart(false), 2200);
   };
@@ -120,7 +131,7 @@ export function TrendingItemSection() {
       l1.remove();
       l2.remove();
     };
-  }, []);
+  }, [teeFront, teeBack]);
 
   // Section entrance observer (threshold 0.15 for general section)
   useEffect(() => {
@@ -273,6 +284,10 @@ export function TrendingItemSection() {
     };
   }, [isLightboxOpen, isSizeGuideOpen]);
 
+  if (!product) return null;
+  const productName = product.name.toUpperCase();
+  const scripture = product.story?.scripture;
+
   return (
     <section
       ref={sectionRef}
@@ -342,8 +357,8 @@ export function TrendingItemSection() {
                         src={displayedSide === "front" ? teeFront : teeBack}
                         alt={
                           displayedSide === "front"
-                            ? "The Most Valuable Fish tee, front view"
-                            : "The Most Valuable Fish tee, back view"
+                            ? `${product.name}, front view`
+                            : `${product.name}, back view`
                         }
                         className="trending-product-img"
                         data-pin-nopin="true"
@@ -409,23 +424,25 @@ export function TrendingItemSection() {
             className="trending-headline trending-fade-item"
             style={{ "--fade-index": 2 } as React.CSSProperties}
           >
-            THE MOST VALUABLE FISH
+            {productName}
           </h2>
 
           {/* 3. Scripture Tag */}
-          <div
-            className="trending-scripture-wrapper trending-fade-item"
-            style={{ "--fade-index": 3 } as React.CSSProperties}
-          >
-            <span className="trending-scripture">MATTHEW 17:27</span>
-          </div>
+          {scripture && (
+            <div
+              className="trending-scripture-wrapper trending-fade-item"
+              style={{ "--fade-index": 3 } as React.CSSProperties}
+            >
+              <span className="trending-scripture">{scripture.toUpperCase()}</span>
+            </div>
+          )}
 
           {/* 4. Description */}
           <p
             className="trending-description trending-fade-item"
             style={{ "--fade-index": 4 } as React.CSSProperties}
           >
-            High-definition iridescent graphic artwork on heavy-gauge cotton.
+            {product.description}
           </p>
 
           {/* 5. Price & Payment Note */}
@@ -433,7 +450,7 @@ export function TrendingItemSection() {
             className="trending-price-group trending-fade-item"
             style={{ "--fade-index": 5 } as React.CSSProperties}
           >
-            <div className="trending-price">{formatGHS(products[0]?.price ?? 200)}</div>
+            <div className="trending-price">{formatGHS(product.price)}</div>
             <div className="trending-payment-subtext">Pay with MoMo or card</div>
           </div>
 
@@ -457,18 +474,20 @@ export function TrendingItemSection() {
               role="radiogroup"
               aria-label="Available sizes"
             >
-              {SIZES.map((size) => {
-                const isSelected = selectedSize === size;
+              {sizes.map(({ label, inStock }) => {
+                const isSelected = selectedSize === label;
                 return (
                   <button
-                    key={size}
+                    key={label}
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
+                    disabled={!inStock}
+                    aria-label={inStock ? label : `${label}, sold out`}
                     className={`trending-size-btn ${isSelected ? "selected" : ""}`}
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => setSelectedSize(label)}
                   >
-                    {size}
+                    {label}
                   </button>
                 );
               })}
@@ -495,9 +514,13 @@ export function TrendingItemSection() {
                 "ADD TO CART"
               )}
             </button>
-            <a href="#featured" className="trending-details-link">
+            <Link
+              to="/products/$slug"
+              params={{ slug: product.slug }}
+              className="trending-details-link"
+            >
               <span>VIEW FULL DETAILS →</span>
-            </a>
+            </Link>
           </div>
 
           {/* 8. Small Trust Row */}
@@ -544,8 +567,8 @@ export function TrendingItemSection() {
                 src={displayedSide === "front" ? teeFront : teeBack}
                 alt={
                   displayedSide === "front"
-                    ? "The Most Valuable Fish tee, front view"
-                    : "The Most Valuable Fish tee, back view"
+                    ? `${product.name}, front view`
+                    : `${product.name}, back view`
                 }
                 className="trending-lightbox-img"
                 data-pin-nopin="true"
@@ -553,9 +576,11 @@ export function TrendingItemSection() {
             </div>
             <div className="trending-lightbox-meta">
               <span className="trending-lightbox-title">
-                THE MOST VALUABLE FISH • HIGH-DEFINITION IRIDESCENT ARTWORK
+                {productName} • {product.colorway.toUpperCase()}
               </span>
-              <span className="trending-lightbox-scripture">MATTHEW 17:27</span>
+              {scripture && (
+                <span className="trending-lightbox-scripture">{scripture.toUpperCase()}</span>
+              )}
             </div>
           </div>
         </div>
@@ -582,50 +607,25 @@ export function TrendingItemSection() {
                 <X size={18} />
               </button>
             </div>
-            <p className="trending-size-guide-note">
-              Relaxed luxury boxy cut with dropped shoulders. True to size for an authentic
-              streetwear drape.
-            </p>
+            {product.details?.fit && <p className="trending-size-guide-note">{product.details.fit}</p>}
             <table className="trending-size-table">
               <thead>
                 <tr>
                   <th>Size</th>
-                  <th>Chest (in)</th>
-                  <th>Length (in)</th>
-                  <th>Shoulder (in)</th>
+                  <th>Chest (cm)</th>
+                  <th>Length (cm)</th>
+                  <th>Shoulder (cm)</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>S</td>
-                  <td>42</td>
-                  <td>28</td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td>M</td>
-                  <td>45</td>
-                  <td>29</td>
-                  <td>21</td>
-                </tr>
-                <tr>
-                  <td>L</td>
-                  <td>48</td>
-                  <td>30</td>
-                  <td>22</td>
-                </tr>
-                <tr>
-                  <td>XL</td>
-                  <td>51</td>
-                  <td>31</td>
-                  <td>23</td>
-                </tr>
-                <tr>
-                  <td>XXL</td>
-                  <td>54</td>
-                  <td>32</td>
-                  <td>24</td>
-                </tr>
+                {(product.sizeChart ?? []).map((row) => (
+                  <tr key={row.size}>
+                    <td>{row.size}</td>
+                    <td>{row.chest}</td>
+                    <td>{row.length}</td>
+                    <td>{row.shoulder ?? "—"}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

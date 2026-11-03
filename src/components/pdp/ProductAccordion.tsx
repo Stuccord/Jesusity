@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, Minus, Plus } from "lucide-react";
-import { type Product } from "../../data/products";
+import { type Product, formatGHS } from "../../data/products";
+import { STORE } from "../../config/store";
 
 interface ProductAccordionProps {
   product: Product;
@@ -174,15 +175,14 @@ export function ProductAccordion({ product }: ProductAccordionProps) {
           className={`pdp-accordion-body ${openSection === "delivery" ? "open" : ""}`}
         >
           <div className="pdp-accordion-inner">
-            {/* TODO: replace with real policy */}
             <p className="pdp-accordion-text">
-              All orders are dispatched from our Accra atelier via discreet tracked courier. We
-              deliver across Greater Accra within 1-2 business days and across other regions in
-              Ghana within 2-5 business days. International express shipping is available at
-              checkout.
+              We deliver across Ghana. {STORE.deliveryEstimate} Orders of{" "}
+              {formatGHS(STORE.freeDeliveryThreshold)} or more ship free; otherwise delivery is{" "}
+              {formatGHS(STORE.deliveryFee)}.
             </p>
             <p className="pdp-accordion-text">
-              We accept unworn, unwashed returns in original packaging within 7 days of delivery.
+              Unworn, unwashed items in their original packaging can be returned within{" "}
+              {STORE.returnWindowDays} days of delivery.
             </p>
             <div className="pdp-accordion-policy-links">
               <Link

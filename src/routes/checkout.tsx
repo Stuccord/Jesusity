@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Lock, ShieldCheck } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { formatGHS } from "../data/products";
 import { PageHeader } from "../components/common/PageHeader";
+import { GHANA_REGIONS, deliveryFeeFor } from "../config/store";
+import { createCheckout } from "../lib/orders";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -20,8 +22,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function CheckoutPage() {
-  const { items, cartSubtotal, clearCart } = useCart();
-  const navigate = useNavigate();
+  const { items, cartSubtotal, isCartReady } = useCart();
 
   const [contact, setContact] = useState({
     name: "",
@@ -34,22 +35,40 @@ function CheckoutPage() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<"momo" | "card">("momo");
-  const [momoProvider, setMomoProvider] = useState("MTN Mobile Money");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const deliveryFee = cartSubtotal >= 500 ? 0 : 35;
+  // Display only: the server recalculates every price and fee before charging
+  const deliveryFee = deliveryFeeFor(cartSubtotal);
   const grandTotal = cartSubtotal + deliveryFee;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (items.length === 0) return;
+    if (items.length === 0 || isSubmitting) return;
     setIsSubmitting(true);
+    setError(null);
 
-    setTimeout(() => {
-      clearCart();
+    try {
+      const result = await createCheckout({
+        data: {
+          ...contact,
+          region: contact.region as (typeof GHANA_REGIONS)[number],
+          notes: contact.notes || undefined,
+          channel: paymentMethod,
+          items: items.map((i) => ({ productId: i.id, size: i.size, quantity: i.quantity })),
+        },
+      });
+      if (!result.ok) {
+        setError(result.error);
+        setIsSubmitting(false);
+        return;
+      }
+      // Hand over to Paystack's secure payment page; it returns to /order-confirmed
+      window.location.assign(result.authorizationUrl);
+    } catch {
+      setError("Please check your details (name, email, phone and address) and try again.");
       setIsSubmitting(false);
-      navigate({ to: "/order-confirmed" });
-    }, 900);
+    }
   };
 
   return (
@@ -60,7 +79,7 @@ function CheckoutPage() {
         subcopy="Complete your details to authorize delivery and payment."
       />
 
-      {items.length === 0 ? (
+      {!isCartReady ? null : items.length === 0 ? (
         <div className="cart-page-empty">
           <h2>YOUR BAG IS EMPTY</h2>
           <p>Please add garments before proceeding to checkout.</p>
@@ -153,14 +172,25 @@ function CheckoutPage() {
                     value={contact.region}
                     onChange={(e) => setContact({ ...contact, region: e.target.value })}
                   >
-                    <option value="Greater Accra">Greater Accra</option>
-                    <option value="Ashanti">Ashanti Region</option>
-                    <option value="Western">Western Region</option>
-                    <option value="Central">Central Region</option>
-                    <option value="Eastern">Eastern Region</option>
-                    <option value="International">International Delivery</option>
+                    {GHANA_REGIONS.map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
+                    ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="checkout-input-field">
+                <label htmlFor="notes">Delivery Notes (optional)</label>
+                <input
+                  id="notes"
+                  type="text"
+                  maxLength={500}
+                  placeholder="Gate colour, best time to call, etc."
+                  value={contact.notes}
+                  onChange={(e) => setContact({ ...contact, notes: e.target.value })}
+                />
               </div>
             </div>
 
@@ -184,7 +214,7 @@ function CheckoutPage() {
                   />
                   <div>
                     <strong>Mobile Money (MoMo)</strong>
-                    <span>Instant prompt on MTN, Telecel, or AT</span>
+                    <span>MTN MoMo, Telecel Cash or AirtelTigo Money</span>
                   </div>
                 </label>
 
@@ -200,29 +230,15 @@ function CheckoutPage() {
                   />
                   <div>
                     <strong>Credit / Debit Card</strong>
-                    <span>Visa, Mastercard & 3D Secure</span>
+                    <span>Visa or Mastercard, verified with 3D Secure</span>
                   </div>
                 </label>
               </div>
 
-              {paymentMethod === "momo" && (
-                <div className="momo-provider-select">
-                  <label htmlFor="momoProvider">Select Network Operator</label>
-                  <select
-                    id="momoProvider"
-                    value={momoProvider}
-                    onChange={(e) => setMomoProvider(e.target.value)}
-                  >
-                    <option value="MTN Mobile Money">MTN Mobile Money (*170#)</option>
-                    <option value="Telecel Cash">Telecel Cash (*110#)</option>
-                    <option value="AT Money">AT Money (*110#)</option>
-                  </select>
-                  <p className="momo-instructions">
-                    Upon clicking place order, an authorization prompt will appear on your mobile
-                    phone to complete payment.
-                  </p>
-                </div>
-              )}
+              <p className="momo-instructions">
+                You'll be taken to Paystack's secure page to pay. For Mobile Money, approve the
+                prompt on your phone (MTN, Telecel or AirtelTigo).
+              </p>
             </div>
           </div>
 
@@ -255,7 +271,7 @@ function CheckoutPage() {
                 </div>
                 <div className="checkout-totals-row">
                   <span>Delivery</span>
-                  <span>{deliveryFee === 0 ? "FREE (Accra)" : formatGHS(deliveryFee)}</span>
+                  <span>{deliveryFee === 0 ? "FREE" : formatGHS(deliveryFee)}</span>
                 </div>
                 <div className="checkout-grand-total">
                   <span>TOTAL DUE</span>
@@ -263,19 +279,25 @@ function CheckoutPage() {
                 </div>
               </div>
 
+              {error && (
+                <p className="checkout-error" role="alert">
+                  {error}
+                </p>
+              )}
+
               <button type="submit" disabled={isSubmitting} className="checkout-submit-btn">
                 {isSubmitting ? (
-                  "AUTHORIZING DISPATCH..."
+                  "CONNECTING TO PAYSTACK..."
                 ) : (
                   <>
-                    <Lock size={16} /> AUTHORIZE & PLACE ORDER ({formatGHS(grandTotal)})
+                    <Lock size={16} /> PAY {formatGHS(grandTotal)}
                   </>
                 )}
               </button>
 
               <div className="checkout-guarantee">
                 <ShieldCheck size={16} />
-                <span>256-Bit Encrypted Payment • Official Jesusity Guarantee</span>
+                <span>Payments processed securely by Paystack</span>
               </div>
             </div>
           </div>

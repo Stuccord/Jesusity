@@ -110,7 +110,6 @@ export function SizeGuideModal({
         <div className="pdp-size-guide-tip-box">
           <p className="pdp-size-guide-tip">
             Our fit is oversized. Size down if you prefer a regular fit.{" "}
-            {/* TODO confirm with real fit */}
           </p>
         </div>
 

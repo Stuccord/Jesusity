@@ -1132,6 +1132,12 @@ a {
   background: rgba(0, 0, 0, 0.08);
 }
 
+.trending-size-btn:disabled {
+  opacity: 0.35;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
 .trending-size-btn.selected {
   background: #000000;
   color: #ffffff;
@@ -7191,6 +7197,16 @@ footer {
   cursor: not-allowed;
 }
 
+.checkout-error {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid #d92d20;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .checkout-guarantee {
   display: flex;
   align-items: center;
@@ -11101,4 +11117,26 @@ footer.site-footer {
 }
 .site-footer .footer-social-link {
   border-radius: 999px;
+}
+
+/* Newsletter feedback */
+.footer-newsletter-error {
+  margin-top: 8px;
+  color: #b42318;
+  font-size: 13px;
+}
+
+/* Second track field has no search icon */
+.track-input.track-input-plain {
+  padding-left: 18px;
+}
+
+/* Admin dashboard uses Tailwind utilities; let them win over the storefront's
+   unlayered element rules (e.g. a { color: inherit }) */
+.admin-root a,
+.admin-root button {
+  color: revert-layer;
+}
+.admin-root img {
+  height: revert-layer;
 }

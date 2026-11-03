@@ -1,4 +1,4 @@
-import { getCategories, getCollections, hasSaleProducts } from "../data/products";
+import { getCategories, getCollections, hasSaleProducts, type Product } from "../data/products";
 
 export interface NavItemChild {
   label: string;
@@ -18,10 +18,10 @@ export interface NavItem {
   visible?: boolean;
 }
 
-export function getNavItems(): NavItem[] {
-  const categories = getCategories();
-  const collections = getCollections();
-  const showSale = hasSaleProducts();
+export function getNavItems(products: Product[]): NavItem[] {
+  const categories = getCategories(products);
+  const collections = getCollections(products);
+  const showSale = hasSaleProducts(products);
 
   const clothingChildren: NavItemChild[] = [
     ...categories.map((c) => ({

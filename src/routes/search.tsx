@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Search, ArrowRight } from "lucide-react";
-import { searchProducts, products, type Product } from "../data/products";
+import { searchProducts, type Product } from "../data/products";
+import { useProducts } from "../context/CatalogContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ProductCard } from "../components/common/ProductCard";
 
@@ -33,10 +34,11 @@ function SearchPage() {
   const currentQ = searchParams.q || "";
   const [inputVal, setInputVal] = useState(currentQ);
 
+  const products = useProducts();
   const results = useMemo(() => {
     if (!currentQ.trim()) return products;
-    return searchProducts(currentQ);
-  }, [currentQ]);
+    return searchProducts(products, currentQ);
+  }, [currentQ, products]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

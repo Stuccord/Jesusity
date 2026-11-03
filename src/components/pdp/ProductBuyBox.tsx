@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Check, Heart, Mail, ShieldCheck, Shirt, Sparkles, Star, Truck } from "lucide-react";
+import { Check, Heart, Mail, ShieldCheck, Shirt, Sparkles, Truck } from "lucide-react";
 import { type Product, formatGHS } from "../../data/products";
+import { subscribe } from "../../lib/inbound";
+import { STORE } from "../../config/store";
 import { useCart } from "../../context/CartContext";
 
 interface ProductBuyBoxProps {
@@ -95,12 +97,25 @@ export function ProductBuyBox({
     navigate({ to: "/checkout" });
   };
 
-  const handleNotifySubmit = (e: React.FormEvent) => {
+  const [notifyError, setNotifyError] = useState<string | null>(null);
+
+  const handleNotifySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!notifyEmail) return;
-    setNotifySuccess(true);
-    setTimeout(() => setNotifySuccess(false), 4000);
-    setNotifyEmail("");
+    setNotifyError(null);
+    try {
+      const result = await subscribe({
+        data: { email: notifyEmail, source: "restock", productId: product.id },
+      });
+      if (result.ok) {
+        setNotifySuccess(true);
+        setNotifyEmail("");
+      } else {
+        setNotifyError(result.error);
+      }
+    } catch {
+      setNotifyError("Please enter a valid email address.");
+    }
   };
 
   return (
@@ -142,23 +157,6 @@ export function ProductBuyBox({
         </div>
         <span className="pdp-payment-note">Pay with MoMo or card</span>
       </div>
-
-      {/* 5. RATING ROW (render ONLY if reviewCount > 0) */}
-      {product.reviewCount !== undefined && product.reviewCount > 0 && (
-        <div className="pdp-rating-row" aria-label={`Rating: ${product.rating || 5.0} stars`}>
-          <div className="pdp-stars-flex">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} size={14} fill="#000000" stroke="#000000" />
-            ))}
-          </div>
-          <span className="pdp-rating-score">
-            {product.rating ? product.rating.toFixed(1) : "5.0"}
-          </span>
-          <span className="pdp-rating-count">
-            ({product.reviewCount} {product.reviewsVerified ? "verified reviews" : "reviews"})
-          </span>
-        </div>
-      )}
 
       {/* 6. SWATCHES (if linked variants exist) */}
       {product.swatches && product.swatches.length > 1 && (
@@ -305,9 +303,10 @@ export function ProductBuyBox({
               </div>
               {notifySuccess && (
                 <div className="pdp-notify-success">
-                  <Check size={14} /> You will be notified the moment this piece rests.
+                  <Check size={14} /> Thanks! We'll email you when it's back in stock.
                 </div>
               )}
+              {notifyError && <div className="footer-newsletter-error">{notifyError}</div>}
             </form>
           </div>
         ) : (
@@ -377,8 +376,7 @@ export function ProductBuyBox({
 
       {/* 13. DELIVERY ESTIMATE LINE */}
       <div className="pdp-delivery-estimate-line">
-        {/* TODO: replace with real delivery times */}
-        <p>Delivery in Accra: 1-2 business days. Other regions: 2-5 business days.</p>
+        <p>{STORE.deliveryEstimate}</p>
       </div>
     </div>
   );

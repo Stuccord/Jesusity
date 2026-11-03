@@ -14,19 +14,19 @@ const POLICIES: Record<
   shipping: {
     title: "SHIPPING & DISPATCH",
     eyebrow: "LOGISTICS POLICY",
-    subcopy: "Standard, express, and international shipping protocols from our Accra studio.",
+    subcopy: "How and where we deliver your order.",
     content: [
       {
-        heading: "1. Accra Metrowide Delivery",
-        body: "All orders within Accra and Tema are fulfilled through dedicated courier riders. Orders placed prior to 1:00 PM GMT are eligible for same-day delivery. Standard delivery operates next business day. Orders totaling GH₵500 or more qualify automatically for complimentary shipping.",
+        heading: "1. Delivery in Accra",
+        body: "Orders within Accra and Tema are delivered by courier, usually within 1–2 business days of payment. Orders of GH₵500 or more ship free; otherwise a flat GH₵35 delivery fee applies.",
       },
       {
-        heading: "2. Nationwide Ghana Transit",
-        body: "For regions outside Greater Accra (including Ashanti, Western, Central, Eastern, and Northern regions), packages are dispatched through regional freight partners. Transit typically requires 2 to 3 business days with active SMS notification.",
+        heading: "2. Delivery Across Ghana",
+        body: "We deliver to all 16 regions of Ghana. Orders outside Greater Accra usually arrive within 2–5 business days. You can check your order's status at any time on the Track Order page with your order reference.",
       },
       {
-        heading: "3. International Destinations",
-        body: "We partner with DHL Express for worldwide shipping across Europe, North America, and continental Africa. Delivery transit spans 3–6 business days. Import duties or customs taxes applied by the recipient's country are the responsibility of the purchaser.",
+        heading: "3. International Orders",
+        body: "We currently deliver within Ghana only.",
       },
     ],
   },
@@ -37,11 +37,11 @@ const POLICIES: Record<
     content: [
       {
         heading: "1. Eligibility Window",
-        body: "We accept returns for unworn, unwashed garments in pristine condition with original hangtags intact within 14 calendar days of delivery confirmation.",
+        body: "We accept returns for unworn, unwashed garments in pristine condition with original hangtags intact within 14 days of delivery.",
       },
       {
         heading: "2. Size Exchange Process",
-        body: "If your garment does not fit as desired, contact our concierge immediately. If your replacement size is in stock, we will reserve it and arrange a complimentary pickup and swap in Accra.",
+        body: "If your item doesn't fit, contact us with your order reference. If your new size is in stock we'll reserve it and arrange the exchange.",
       },
       {
         heading: "3. Limited Edition Capsule Policy",
@@ -56,11 +56,11 @@ const POLICIES: Record<
     content: [
       {
         heading: "1. Information We Collect",
-        body: "When you place an order, subscribe to our newsletter, or contact our studio, we collect your name, phone number, email address, and delivery coordinates strictly to fulfill your order and provide service updates.",
+        body: "When you place an order, subscribe to our newsletter, or contact us, we collect your name, phone number, email address and delivery address to fulfil your order and reply to you. We also record anonymous page visits (page, referring site, country, device type) to understand how the store is used. We don't store IP addresses, and visitors with Do Not Track enabled aren't counted.",
       },
       {
         heading: "2. Mobile Money & Payment Security",
-        body: "We never store raw credit card details or Mobile Money PINs on our servers. All transactions are securely routed through PCI-DSS Level 1 compliant gateway processors with end-to-end encryption.",
+        body: "Payments are processed by Paystack, a PCI-DSS compliant payment provider. Your card details and Mobile Money PIN go directly to Paystack and are never seen or stored by Jesusity.",
       },
       {
         heading: "3. No Third-Party Selling",

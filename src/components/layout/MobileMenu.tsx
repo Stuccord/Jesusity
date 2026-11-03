@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Search, UserRound, X } from "lucide-react";
+import { ChevronDown, Heart, Search, X } from "lucide-react";
 import logoImage from "../../assets/logo.png";
+import { useProducts } from "../../context/CatalogContext";
 import { getNavItems } from "../../config/nav";
 
 interface MobileMenuProps {
@@ -12,7 +13,8 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, onClose, onOpenSearch }: MobileMenuProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const navItems = getNavItems();
+  const products = useProducts();
+  const navItems = getNavItems(products);
 
   // Lock body scroll while open
   useEffect(() => {
@@ -128,9 +130,9 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }: MobileMenuProps) {
           <Search size={18} />
           <span>SEARCH STORE</span>
         </button>
-        <Link to="/account" className="mobile-footer-action" onClick={onClose}>
-          <UserRound size={18} />
-          <span>MY ACCOUNT</span>
+        <Link to="/wishlist" className="mobile-footer-action" onClick={onClose}>
+          <Heart size={18} />
+          <span>WISHLIST</span>
         </Link>
       </div>
     </div>

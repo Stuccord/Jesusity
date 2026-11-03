@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag } from "lucide-react";
 import logoImage from "../../assets/logo.png";
+import { useProducts } from "../../context/CatalogContext";
 import { getNavItems, type NavItem } from "../../config/nav";
 import { useCart } from "../../context/CartContext";
 
@@ -16,7 +17,8 @@ export function Navbar({ onOpenSearch, onOpenMobileMenu }: NavbarProps) {
   const closeTimeoutRef = useRef<number | null>(null);
   const openTimeoutRef = useRef<number | null>(null);
 
-  const navItems = getNavItems();
+  const products = useProducts();
+  const navItems = getNavItems(products);
   const { cartCount, cartBump, openCart } = useCart();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
@@ -215,8 +217,8 @@ export function Navbar({ onOpenSearch, onOpenMobileMenu }: NavbarProps) {
           <span className="search-pill-label">Search</span>
         </button>
 
-        {/* Favourites (wishlist lives on the account page) */}
-        <Link to="/account" className="icon-button account-button" aria-label="Favourites">
+        {/* Favourites (saved on this device) */}
+        <Link to="/wishlist" className="icon-button account-button" aria-label="Wishlist">
           <Heart size={20} />
         </Link>
 

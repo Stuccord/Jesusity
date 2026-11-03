@@ -15,7 +15,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const [added, setAdded] = useState(false);
   const { addToCart } = useCart();
 
-  const isSoldOut = product.badge === "SOLD OUT";
+  const isSoldOut = product.badge === "SOLD OUT" || product.sizes.every((s) => !s.inStock);
   const hasBackImage = Boolean(product.images.back);
   const displayImage =
     hovered && hasBackImage && product.images.back

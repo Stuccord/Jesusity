@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const MESSAGES = [
-  "Free delivery in Accra over GH₵500",
+  "Free delivery on orders over GH₵500",
   "Pay with MoMo or card",
   "Delivery across Ghana",
 ];
