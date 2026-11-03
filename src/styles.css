@@ -11308,3 +11308,44 @@ footer.site-footer {
   font-weight: 600;
   color: #027a48;
 }
+.vip-phone-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.vip-phone-row input {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.vip-country {
+  position: relative;
+  flex: none;
+}
+.vip-country-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0 10px 0 12px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  white-space: nowrap;
+}
+/* The real select sits invisibly on top so the closed state stays compact */
+.vip-country select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.vip-country:focus-within .vip-country-value {
+  border-color: #000000;
+}
+.checkout-field-hint {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}

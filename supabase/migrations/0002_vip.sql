@@ -4,7 +4,7 @@
 
 create table if not exists public.vip_members (
   id bigserial primary key,
-  phone text not null unique, -- normalised to 0XXXXXXXXX
+  phone text not null unique, -- international format, e.g. +233241234567
   email text,
   created_at timestamptz not null default now(),
   redeemed_order_id uuid references public.orders(id) on delete set null,

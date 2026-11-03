@@ -1,0 +1,71 @@
+// Country calling codes for phone fields. Ghana first, then A–Z.
+// Add a country here to make it selectable.
+
+export interface DialCountry {
+  iso: string;
+  name: string;
+  dial: string;
+}
+
+export const DEFAULT_COUNTRY: DialCountry = { iso: "GH", name: "Ghana", dial: "233" };
+
+export const DIAL_COUNTRIES: DialCountry[] = [
+  DEFAULT_COUNTRY,
+  { iso: "AU", name: "Australia", dial: "61" },
+  { iso: "AT", name: "Austria", dial: "43" },
+  { iso: "BE", name: "Belgium", dial: "32" },
+  { iso: "BJ", name: "Benin", dial: "229" },
+  { iso: "BW", name: "Botswana", dial: "267" },
+  { iso: "BR", name: "Brazil", dial: "55" },
+  { iso: "BF", name: "Burkina Faso", dial: "226" },
+  { iso: "CM", name: "Cameroon", dial: "237" },
+  { iso: "CA", name: "Canada", dial: "1" },
+  { iso: "CN", name: "China", dial: "86" },
+  { iso: "CI", name: "Côte d'Ivoire", dial: "225" },
+  { iso: "DK", name: "Denmark", dial: "45" },
+  { iso: "EG", name: "Egypt", dial: "20" },
+  { iso: "ET", name: "Ethiopia", dial: "251" },
+  { iso: "FI", name: "Finland", dial: "358" },
+  { iso: "FR", name: "France", dial: "33" },
+  { iso: "GM", name: "Gambia", dial: "220" },
+  { iso: "DE", name: "Germany", dial: "49" },
+  { iso: "GN", name: "Guinea", dial: "224" },
+  { iso: "IN", name: "India", dial: "91" },
+  { iso: "IE", name: "Ireland", dial: "353" },
+  { iso: "IL", name: "Israel", dial: "972" },
+  { iso: "IT", name: "Italy", dial: "39" },
+  { iso: "JM", name: "Jamaica", dial: "1" },
+  { iso: "JP", name: "Japan", dial: "81" },
+  { iso: "KE", name: "Kenya", dial: "254" },
+  { iso: "LB", name: "Lebanon", dial: "961" },
+  { iso: "LR", name: "Liberia", dial: "231" },
+  { iso: "ML", name: "Mali", dial: "223" },
+  { iso: "MA", name: "Morocco", dial: "212" },
+  { iso: "NL", name: "Netherlands", dial: "31" },
+  { iso: "NZ", name: "New Zealand", dial: "64" },
+  { iso: "NE", name: "Niger", dial: "227" },
+  { iso: "NG", name: "Nigeria", dial: "234" },
+  { iso: "NO", name: "Norway", dial: "47" },
+  { iso: "PL", name: "Poland", dial: "48" },
+  { iso: "PT", name: "Portugal", dial: "351" },
+  { iso: "QA", name: "Qatar", dial: "974" },
+  { iso: "RW", name: "Rwanda", dial: "250" },
+  { iso: "SA", name: "Saudi Arabia", dial: "966" },
+  { iso: "SN", name: "Senegal", dial: "221" },
+  { iso: "SL", name: "Sierra Leone", dial: "232" },
+  { iso: "ZA", name: "South Africa", dial: "27" },
+  { iso: "KR", name: "South Korea", dial: "82" },
+  { iso: "ES", name: "Spain", dial: "34" },
+  { iso: "SE", name: "Sweden", dial: "46" },
+  { iso: "CH", name: "Switzerland", dial: "41" },
+  { iso: "TZ", name: "Tanzania", dial: "255" },
+  { iso: "TG", name: "Togo", dial: "228" },
+  { iso: "TT", name: "Trinidad and Tobago", dial: "1" },
+  { iso: "TR", name: "Turkey", dial: "90" },
+  { iso: "UG", name: "Uganda", dial: "256" },
+  { iso: "AE", name: "United Arab Emirates", dial: "971" },
+  { iso: "GB", name: "United Kingdom", dial: "44" },
+  { iso: "US", name: "United States", dial: "1" },
+  { iso: "ZM", name: "Zambia", dial: "260" },
+  { iso: "ZW", name: "Zimbabwe", dial: "263" },
+];

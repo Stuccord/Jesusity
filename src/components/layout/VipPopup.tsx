@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { STORE } from "../../config/store";
-import { joinVip, normalizeGhanaPhone } from "../../lib/vip";
+import { DEFAULT_COUNTRY, DIAL_COUNTRIES } from "../../config/countries";
+import { joinVip, normalizePhone } from "../../lib/vip";
 
 const STORAGE_KEY = "jesusity_vip";
 const SHOW_AFTER_MS = 1000;
@@ -35,12 +36,15 @@ export function VipPopup() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hidden = HIDDEN_ON.some((p) => pathname.startsWith(p));
   const [isOpen, setIsOpen] = useState(false);
+  const [countryIso, setCountryIso] = useState(DEFAULT_COUNTRY.iso);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "joined">("idle");
   const [error, setError] = useState<string | null>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const country = DIAL_COUNTRIES.find((c) => c.iso === countryIso) ?? DEFAULT_COUNTRY;
+  const fullPhone = normalizePhone(phone, country.dial);
 
   useEffect(() => {
     if (hidden || isOpen || !shouldShow()) return;
@@ -67,8 +71,8 @@ export function VipPopup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (status === "sending") return;
-    if (!normalizeGhanaPhone(phone)) {
-      setError("Enter a valid Ghana phone number, e.g. 024 123 4567.");
+    if (!fullPhone) {
+      setError(`Enter a valid phone number for ${country.name}.`);
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
@@ -79,7 +83,7 @@ export function VipPopup() {
     setError(null);
     try {
       const result = await joinVip({
-        data: { phone, email: email.trim(), website: website || undefined },
+        data: { phone, dial: country.dial, email: email.trim(), website: website || undefined },
       });
       if (!result.ok) {
         setError(result.error);
@@ -114,7 +118,7 @@ export function VipPopup() {
           <>
             <h2 id="vip-title" className="vip-title">YOU'RE IN.</h2>
             <p className="vip-copy">
-              Check out with <strong>{normalizeGhanaPhone(phone)}</strong> and{" "}
+              Check out with <strong>{fullPhone}</strong> and{" "}
               {STORE.vipDiscountPercent}% comes off your first order automatically.
             </p>
             <button type="button" className="vip-submit" onClick={() => setIsOpen(false)}>
@@ -132,17 +136,36 @@ export function VipPopup() {
             </p>
             <form onSubmit={handleSubmit} className="vip-form" noValidate>
               <label htmlFor="vip-phone">Phone number *</label>
-              <input
-                ref={phoneRef}
-                id="vip-phone"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                required
-                placeholder="024 123 4567"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <div className="vip-phone-row">
+                <div className="vip-country">
+                  <span className="vip-country-value" aria-hidden="true">
+                    {country.iso} +{country.dial}
+                    <ChevronDown size={14} />
+                  </span>
+                  <select
+                    aria-label="Country code"
+                    value={countryIso}
+                    onChange={(e) => setCountryIso(e.target.value)}
+                  >
+                    {DIAL_COUNTRIES.map((c) => (
+                      <option key={c.iso} value={c.iso}>
+                        {c.name} (+{c.dial})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <input
+                  ref={phoneRef}
+                  id="vip-phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel-national"
+                  required
+                  placeholder={country.iso === DEFAULT_COUNTRY.iso ? "024 123 4567" : "Phone number"}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
               <label htmlFor="vip-email">Email *</label>
               <input
                 id="vip-email"

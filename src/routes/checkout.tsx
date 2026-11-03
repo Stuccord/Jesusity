@@ -6,7 +6,7 @@ import { formatGHS } from "../data/products";
 import { PageHeader } from "../components/common/PageHeader";
 import { GHANA_REGIONS, STORE, deliveryFeeFor } from "../config/store";
 import { createCheckout } from "../lib/orders";
-import { checkVipDiscount, normalizeGhanaPhone, vipDiscountFor } from "../lib/vip";
+import { checkVipDiscount, normalizePhone, vipDiscountFor } from "../lib/vip";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -41,7 +41,7 @@ function CheckoutPage() {
 
   // VIP list members get their discount on the first paid order with their number
   const [vipPhone, setVipPhone] = useState<string | null>(null);
-  const normalizedPhone = normalizeGhanaPhone(contact.phone);
+  const normalizedPhone = normalizePhone(contact.phone);
   useEffect(() => {
     if (!normalizedPhone) return;
     let cancelled = false;
@@ -154,6 +154,9 @@ function CheckoutPage() {
                   value={contact.phone}
                   onChange={(e) => setContact({ ...contact, phone: e.target.value })}
                 />
+                <p className="checkout-field-hint">
+                  Outside Ghana? Start with + and your country code.
+                </p>
                 {vipDiscount > 0 && (
                   <p className="checkout-vip-note">
                     <CheckCircle2 size={14} /> VIP number: {STORE.vipDiscountPercent}% off applied
