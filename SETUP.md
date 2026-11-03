@@ -17,7 +17,8 @@ and checkout politely says payments aren't available yet. Nothing is faked.
 
 1. Create a project at [supabase.com](https://supabase.com). Pick the region closest to Ghana (e.g. EU West / Frankfurt).
 2. Open **SQL Editor**, paste all of `supabase/migrations/0001_store.sql`, and run it.
-   Then, in a new query, paste and run `supabase/migrations/0002_vip.sql` (VIP list + discount).
+   Then, in new queries, paste and run `supabase/migrations/0002_vip.sql` (VIP list + discount)
+   and `supabase/migrations/0003_roles.sql` (admin roles and activity log), in that order.
 3. In a new query, paste `supabase/seed.sql` and run it. This loads your current products.
    Every in-stock size starts at **10 units**: set your real stock in the admin dashboard afterwards.
 4. Go to **Project Settings → API** and copy:
@@ -32,7 +33,7 @@ and checkout politely says payments aren't available yet. Nothing is faked.
    select id from auth.users where email = 'you@example.com';
    ```
 
-   Repeat for anyone else who should see the dashboard.
+   This first admin is a **Manager**. Add everyone else from **/admin → Team** instead of SQL.
 7. Authentication → **Sign In / Providers**: turn **off** "Allow new users to sign up".
    Admins are added by you only.
 8. Authentication → **URL Configuration**: set Site URL to your domain (e.g. `https://www.your-domain.com`)
@@ -81,3 +82,13 @@ and checkout politely says payments aren't available yet. Nothing is faked.
   number. The discount applies automatically at checkout when they use that number, once per
   number, and is only used up when payment succeeds. Change the percent in `src/config/store.ts`.
 - **Refunds** are issued from the Paystack dashboard; then set the order to *Refunded* in admin.
+- **Team** (managers only): add admins by email and choose their role. New people get an email
+  to set their password. The activity log shows who changed which order, price, stock or role.
+
+  | Role | Can do |
+  | --- | --- |
+  | Manager | Everything, including the Team page |
+  | Accounts | Revenue and overview, orders with payments, refunds and cancellations, CSV exports, visitor stats. Products are view-only |
+  | Staff | Orders for packing and delivery (no prices or payment details), move orders to *Being prepared / Out for delivery / Delivered*, stock and show/hide products, messages |
+
+  These rules are enforced by the database, not just hidden in the dashboard.

@@ -13,6 +13,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../components/ui/sheet";
 import { formatGHS } from "../data/products";
 import { PRODUCT_SELECT, type ProductRow } from "../lib/catalog";
+import { can } from "../lib/admin";
 
 export const Route = createFileRoute("/admin/products")({
   component: AdminProducts,
@@ -43,18 +44,28 @@ function useProductsQuery() {
 }
 
 function AdminProducts() {
+  const { role } = useAdmin();
   const products = useProductsQuery();
   const [editing, setEditing] = useState<ProductRow | "new" | null>(null);
+  const canCatalog = can(role, "catalog");
 
   return (
     <div>
       <PageTitle
         title="Products"
-        description="Change prices and stock, hide items, or add new products. Changes show on the store within a minute."
+        description={
+          canCatalog
+            ? "Change prices and stock, hide items, or add new products. Changes show on the store within a minute."
+            : can(role, "stock")
+              ? "Update stock and show or hide items. Prices and product details are managed by a manager."
+              : "View products, prices and stock. Changes are made by managers and staff."
+        }
         actions={
-          <Button size="sm" onClick={() => setEditing("new")}>
-            <Plus size={15} /> Add product
-          </Button>
+          canCatalog && (
+            <Button size="sm" onClick={() => setEditing("new")}>
+              <Plus size={15} /> Add product
+            </Button>
+          )
         }
       />
       <ErrorNote error={products.error} />
@@ -66,7 +77,11 @@ function AdminProducts() {
       ) : (
         <div className="space-y-3">
           {products.data!.map((p) => (
-            <ProductRowCard key={p.id} product={p} onEdit={() => setEditing(p)} />
+            <ProductRowCard
+              key={p.id}
+              product={p}
+              onEdit={canCatalog ? () => setEditing(p) : undefined}
+            />
           ))}
         </div>
       )}
@@ -87,8 +102,9 @@ function AdminProducts() {
 }
 
 /** One product with inline stock editing and a visibility toggle */
-function ProductRowCard({ product, onEdit }: { product: ProductRow; onEdit: () => void }) {
-  const { supabase } = useAdmin();
+function ProductRowCard({ product, onEdit }: { product: ProductRow; onEdit?: (() => void) | undefined }) {
+  const { supabase, role } = useAdmin();
+  const canStock = can(role, "stock");
   const queryClient = useQueryClient();
   const [stock, setStock] = useState<Record<string, string>>({});
 
@@ -159,13 +175,16 @@ function ProductRowCard({ product, onEdit }: { product: ProductRow; onEdit: () =
                 <Switch
                   checked={product.is_active}
                   onCheckedChange={(v) => toggleActive.mutate(v)}
+                  disabled={!canStock}
                   aria-label="Visible on store"
                 />
                 {product.is_active ? "Visible" : "Hidden"}
               </label>
-              <Button variant="outline" size="sm" onClick={onEdit}>
-                <Pencil size={14} /> Edit
-              </Button>
+              {onEdit && (
+                <Button variant="outline" size="sm" onClick={onEdit}>
+                  <Pencil size={14} /> Edit
+                </Button>
+              )}
             </div>
           </div>
 
@@ -181,6 +200,7 @@ function ProductRowCard({ product, onEdit }: { product: ProductRow; onEdit: () =
                     min={0}
                     inputMode="numeric"
                     value={value}
+                    readOnly={!canStock}
                     onChange={(e) => setStock({ ...stock, [s.label]: e.target.value })}
                     className={`h-9 w-14 rounded-md border text-center tabular-nums ${
                       n === 0 ? "border-red-300 bg-red-50" : n <= 3 ? "border-amber-300 bg-amber-50" : ""

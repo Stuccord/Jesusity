@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../components/ui/sheet";
 import { formatGHS } from "../data/products";
 import { ORDER_STATUS_LABELS } from "../config/store";
-import { downloadCsv, formatDateTime, timeAgo } from "../lib/admin";
+import { can, downloadCsv, formatDateTime, timeAgo } from "../lib/admin";
 
 interface OrdersSearch {
   ref?: string;
@@ -32,12 +32,13 @@ interface OrderRow {
   city: string;
   region: string;
   notes: string | null;
-  subtotal: number;
-  discount: number;
-  delivery_fee: number;
-  total: number;
-  payment_reference: string | null;
-  payment_channel: string | null;
+  // Money fields are left out for roles without money access (staff)
+  subtotal?: number;
+  discount?: number;
+  delivery_fee?: number;
+  total?: number;
+  payment_reference?: string | null;
+  payment_channel?: string | null;
   paid_at: string | null;
   created_at: string;
   order_items: {
@@ -46,7 +47,7 @@ interface OrderRow {
     colorway: string | null;
     size: string;
     quantity: number;
-    unit_price: number;
+    unit_price?: number;
     image: string | null;
   }[];
   order_events: { id: number; status: string; note: string | null; created_at: string }[];
@@ -61,11 +62,13 @@ const FILTERS = [
   { key: "closed", label: "Cancelled", statuses: ["cancelled", "refunded"] },
 ] as const;
 
-// Statuses an admin can move a paid order through
+// Statuses an admin can move a paid order through (the database checks roles too)
 const NEXT_STATUSES = ["paid", "processing", "shipped", "delivered", "cancelled", "refunded"];
+const STAFF_STATUSES = ["processing", "shipped", "delivered"];
 
 function AdminOrders() {
-  const { supabase } = useAdmin();
+  const { supabase, role } = useAdmin();
+  const showMoney = can(role, "money");
   const { ref } = Route.useSearch();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["key"]>("all");
   const [query, setQuery] = useState(ref ?? "");
@@ -73,8 +76,13 @@ function AdminOrders() {
   const [linkDismissed, setLinkDismissed] = useState(false);
 
   const orders = useQuery({
-    queryKey: ["admin-orders"],
+    queryKey: ["admin-orders", showMoney],
     queryFn: async () => {
+      if (!showMoney) {
+        const { data, error } = await supabase.rpc("fulfilment_orders");
+        if (error) throw error;
+        return data as OrderRow[];
+      }
       const { data, error } = await supabase
         .from("orders")
         .select("*, order_items(*), order_events(*)")
@@ -134,9 +142,11 @@ function AdminOrders() {
         title="Orders"
         description="Every checkout, paid or not. Click an order to see details and update its status."
         actions={
-          <Button variant="outline" size="sm" onClick={exportCsv} disabled={visible.length === 0}>
-            <Download size={15} /> Export CSV
-          </Button>
+          showMoney && (
+            <Button variant="outline" size="sm" onClick={exportCsv} disabled={visible.length === 0}>
+              <Download size={15} /> Export CSV
+            </Button>
+          )
         }
       />
       <ErrorNote error={orders.error} />
@@ -188,7 +198,7 @@ function AdminOrders() {
                 >
                   <span className="font-medium">{o.reference}</span>
                   <span className="text-right tabular-nums md:order-4 md:text-left">
-                    {formatGHS(Number(o.total))}
+                    {showMoney ? formatGHS(Number(o.total)) : `${o.order_items.length} item${o.order_items.length === 1 ? "" : "s"}`}
                   </span>
                   <span className="truncate text-neutral-600 md:order-2">
                     {o.customer_name}
@@ -225,21 +235,25 @@ function AdminOrders() {
 }
 
 function OrderDetail({ order }: { order: OrderRow }) {
-  const { supabase } = useAdmin();
+  const { supabase, role } = useAdmin();
+  const showMoney = can(role, "money");
+  const canRefund = can(role, "refunds");
+  const locked = !canRefund && ["cancelled", "refunded"].includes(order.status);
+  const statusOptions = canRefund
+    ? NEXT_STATUSES
+    : [...new Set([order.status, ...STAFF_STATUSES])];
   const queryClient = useQueryClient();
   const [status, setStatus] = useState(order.status);
   const [note, setNote] = useState("");
 
   const update = useMutation({
     mutationFn: async () => {
-      if (status !== order.status) {
-        const { error } = await supabase.from("orders").update({ status }).eq("id", order.id);
-        if (error) throw error;
-      }
-      const { error } = await supabase.from("order_events").insert({
-        order_id: order.id,
-        status,
-        note: note.trim() || null,
+      // One database call that checks the role, updates the status, adds the
+      // timeline entry and records who did it
+      const { error } = await supabase.rpc("admin_update_order", {
+        p_order_id: order.id,
+        p_status: status,
+        p_note: note.trim() || null,
       });
       if (error) throw error;
     },
@@ -317,12 +331,15 @@ function OrderDetail({ order }: { order: OrderRow }) {
                     {item.colorway} · Size {item.size} · Qty {item.quantity}
                   </p>
                 </div>
-                <span className="tabular-nums">
-                  {formatGHS(Number(item.unit_price) * item.quantity)}
-                </span>
+                {showMoney && (
+                  <span className="tabular-nums">
+                    {formatGHS(Number(item.unit_price) * item.quantity)}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
+          {showMoney && (
           <dl className="mt-3 space-y-1">
             <div className="flex justify-between">
               <dt className="text-neutral-500">Subtotal</dt>
@@ -343,13 +360,16 @@ function OrderDetail({ order }: { order: OrderRow }) {
               <dd className="tabular-nums">{formatGHS(Number(order.total))}</dd>
             </div>
           </dl>
+          )}
         </section>
 
         <section>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Payment
           </h3>
-          {isPaid ? (
+          {isPaid && !showMoney ? (
+            <p>Paid {formatDateTime(order.paid_at!)}</p>
+          ) : isPaid ? (
             <p>
               Paid {formatDateTime(order.paid_at!)} via{" "}
               {order.payment_channel === "mobile_money" ? "Mobile Money" : (order.payment_channel ?? "Paystack")}
@@ -383,7 +403,12 @@ function OrderDetail({ order }: { order: OrderRow }) {
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">
             Update order
           </h3>
-          {isPaid ? (
+          {locked ? (
+            <p className="text-neutral-600">
+              This order is {ORDER_STATUS_LABELS[order.status]?.toLowerCase()}. Only managers and
+              accounts can change it.
+            </p>
+          ) : isPaid ? (
             <form
               className="space-y-2"
               onSubmit={(e) => {
@@ -397,7 +422,7 @@ function OrderDetail({ order }: { order: OrderRow }) {
                 className="h-9 w-full rounded-md border bg-white px-2 text-sm"
                 aria-label="Order status"
               >
-                {NEXT_STATUSES.map((s) => (
+                {statusOptions.map((s) => (
                   <option key={s} value={s}>
                     {ORDER_STATUS_LABELS[s]}
                   </option>

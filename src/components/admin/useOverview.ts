@@ -25,7 +25,7 @@ export function useOverview(days: number) {
   return useQuery({
     queryKey: ["admin-overview", days],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("admin_overview", { p_days: days });
+      const { data, error } = await supabase.rpc("admin_dashboard", { p_days: days });
       if (error) throw error;
       return data as Overview;
     },

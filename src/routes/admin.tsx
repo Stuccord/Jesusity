@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate, Outlet, useRouterState } from "@tanstack/react-router";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   BarChart3,
@@ -10,10 +10,18 @@ import {
   Mail,
   Menu,
   Package,
+  ShieldCheck,
   ShoppingCart,
+  Users,
   X,
 } from "lucide-react";
-import { useAdminAuth } from "../lib/admin";
+import {
+  ROLE_LABELS,
+  can,
+  useAdminAuth,
+  type AdminPermission,
+  type AdminRole,
+} from "../lib/admin";
 import { AdminContext } from "../components/admin/AdminContext";
 import { getBrowserSupabase } from "../lib/supabase/client";
 import { Button } from "../components/ui/button";
@@ -29,14 +37,24 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const NAV = [
-  { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
+const NAV: {
+  to: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+  permission?: AdminPermission;
+}[] = [
+  { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true, permission: "overview" },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { to: "/admin/products", label: "Products", icon: Package },
-  { to: "/admin/visitors", label: "Visitors", icon: BarChart3 },
-  { to: "/admin/messages", label: "Messages", icon: Inbox },
-  { to: "/admin/subscribers", label: "Subscribers", icon: Mail },
-] as const;
+  { to: "/admin/visitors", label: "Visitors", icon: BarChart3, permission: "visitors" },
+  { to: "/admin/messages", label: "Messages", icon: Inbox, permission: "messages" },
+  { to: "/admin/subscribers", label: "Subscribers", icon: Mail, permission: "customers" },
+  { to: "/admin/team", label: "Team", icon: Users, permission: "team" },
+];
+
+const isActive = (item: (typeof NAV)[number], pathname: string) =>
+  item.exact ? pathname === item.to || pathname === `${item.to}/` : pathname.startsWith(item.to);
 
 function AdminLayout() {
   const auth = useAdminAuth();
@@ -58,28 +76,31 @@ function AdminLayout() {
     return (
       <AdminShellMessage
         title="This account isn't an admin"
-        body={`${auth.email} is signed in but isn't listed in admin_users. Add it with the SQL in SETUP.md, then reload.`}
+        body={`${auth.email} is signed in but isn't on the admin team. Ask a manager to add you on the Team page, then reload.`}
         action={<SignOutButton />}
       />
     );
   }
 
   return (
-    <AdminContext.Provider value={{ supabase: auth.supabase, session: auth.session }}>
-      <AdminFrame email={auth.session.user.email ?? ""} />
+    <AdminContext.Provider value={{ supabase: auth.supabase, session: auth.session, role: auth.role }}>
+      <AdminFrame email={auth.session.user.email ?? ""} role={auth.role} />
     </AdminContext.Provider>
   );
 }
 
-function AdminFrame({ email }: { email: string }) {
+function AdminFrame({ email, role }: { email: string; role: AdminRole }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [navOpen, setNavOpen] = useState(false);
+  const allowed = NAV.filter((item) => !item.permission || can(role, item.permission));
+  const current = NAV.find((item) => isActive(item, pathname));
+  const blocked = current?.permission ? !can(role, current.permission) : false;
 
   const nav = (
     <nav className="flex flex-col gap-1">
-      {NAV.map(({ to, label, icon: Icon, ...rest }) => {
-        const active =
-          "exact" in rest ? pathname === to || pathname === `${to}/` : pathname.startsWith(to);
+      {allowed.map((item) => {
+        const { to, label, icon: Icon } = item;
+        const active = isActive(item, pathname);
         return (
           <Link
             key={to}
@@ -115,6 +136,9 @@ function AdminFrame({ email }: { email: string }) {
         <div className="fixed inset-x-0 top-14 z-20 border-b bg-white p-3 shadow-lg lg:hidden">
           {nav}
           <div className="mt-3 border-t pt-3">
+            <p className="mb-2 px-3 text-xs text-neutral-500">
+              {email} · {ROLE_LABELS[role]}
+            </p>
             <SignOutButton />
           </div>
         </div>
@@ -133,15 +157,32 @@ function AdminFrame({ email }: { email: string }) {
             >
               <ExternalLink size={15} /> View store
             </a>
-            <p className="truncate px-3 text-xs text-neutral-500" title={email}>
-              {email}
-            </p>
+            <div className="px-3">
+              <p className="truncate text-xs text-neutral-500" title={email}>
+                {email}
+              </p>
+              <p className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-neutral-700">
+                <ShieldCheck size={13} /> {ROLE_LABELS[role]}
+              </p>
+            </div>
             <SignOutButton />
           </div>
         </aside>
 
         <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
-          <Outlet />
+          {!blocked ? (
+            <Outlet />
+          ) : current?.to === "/admin" ? (
+            // Staff start on Orders instead of the money overview
+            <Navigate to="/admin/orders" replace />
+          ) : (
+            <div className="mx-auto mt-16 max-w-md rounded-lg border bg-white p-6 text-center">
+              <h1 className="text-lg font-semibold">You don't have access to this page</h1>
+              <p className="mt-2 text-sm text-neutral-600">
+                Your role is {ROLE_LABELS[role]}. Ask a manager if you need access.
+              </p>
+            </div>
+          )}
         </main>
       </div>
     </div>

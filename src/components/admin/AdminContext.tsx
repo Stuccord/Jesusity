@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { AdminRole } from "../../lib/admin";
 
 interface AdminContextValue {
   supabase: SupabaseClient;
   session: Session;
+  role: AdminRole;
 }
 
 export const AdminContext = createContext<AdminContextValue | null>(null);

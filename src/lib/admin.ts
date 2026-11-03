@@ -2,13 +2,47 @@ import { useEffect, useState } from "react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { getBrowserSupabase } from "./supabase/client";
 
+export type AdminRole = "manager" | "accounts" | "staff";
+
+export const ROLE_LABELS: Record<AdminRole, string> = {
+  manager: "Manager",
+  accounts: "Accounts",
+  staff: "Staff",
+};
+
+export const ROLE_DESCRIPTIONS: Record<AdminRole, string> = {
+  manager: "Everything, including adding admins and changing roles",
+  accounts: "Revenue, orders with payments, refunds, exports and visitor stats",
+  staff: "Packing and delivery: orders without prices, stock, and messages",
+};
+
+// What each role can do in the dashboard. The database enforces the same
+// rules (supabase/migrations/0003_roles.sql); this only decides what to show.
+const PERMISSIONS = {
+  overview: ["manager", "accounts"],
+  money: ["manager", "accounts"],
+  refunds: ["manager", "accounts"],
+  stock: ["manager", "staff"],
+  catalog: ["manager"],
+  visitors: ["manager", "accounts"],
+  messages: ["manager", "staff"],
+  customers: ["manager"],
+  team: ["manager"],
+} satisfies Record<string, AdminRole[]>;
+
+export type AdminPermission = keyof typeof PERMISSIONS;
+
+export function can(role: AdminRole, permission: AdminPermission): boolean {
+  return (PERMISSIONS[permission] as AdminRole[]).includes(role);
+}
+
 export type AdminState =
   | { status: "unconfigured" }
   | { status: "loading" }
   | { status: "signed-out" }
   | { status: "recovery"; supabase: SupabaseClient }
   | { status: "not-admin"; email: string }
-  | { status: "ready"; session: Session; supabase: SupabaseClient };
+  | { status: "ready"; session: Session; supabase: SupabaseClient; role: AdminRole };
 
 /** Tracks the Supabase login and whether that user is listed in admin_users. */
 export function useAdminAuth(): AdminState {
@@ -34,16 +68,16 @@ export function useAdminAuth(): AdminState {
       }
       if (session.user.id === checkedUserId) return;
       checkedUserId = session.user.id;
-      // RLS only lets admins see admin_users, so a row back means "is admin"
+      // RLS shows each admin their own row, so a row back means "is admin"
       const { data } = await supabase
         .from("admin_users")
-        .select("user_id")
+        .select("role")
         .eq("user_id", session.user.id)
         .maybeSingle();
       if (cancelled || recovering) return;
       setState(
         data
-          ? { status: "ready", session, supabase }
+          ? { status: "ready", session, supabase, role: (data.role as AdminRole) ?? "staff" }
           : { status: "not-admin", email: session.user.email ?? "" },
       );
     };
