@@ -1,49 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const MESSAGES = [
-  "Free delivery on orders over GH₵500",
-  "Pay with MoMo or card",
-  "Delivery across Ghana",
-];
-
-const INTERVAL_MS = 4500;
+import { STORE } from "../../config/store";
+import { openVipPopup } from "./vipPopupEvents";
 
 export function AnnouncementBar() {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  const step = useCallback((dir: 1 | -1) => {
-    setIndex((i) => (i + dir + MESSAGES.length) % MESSAGES.length);
-  }, []);
-
-  useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => step(1), INTERVAL_MS);
-    return () => window.clearInterval(id);
-  }, [paused, step, index]);
-
   return (
-    <div
-      className="promo-bar"
-      role="region"
-      aria-label="Announcements"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <button type="button" className="promo-arrow" onClick={() => step(-1)} aria-label="Previous announcement">
-        <ChevronLeft size={16} />
+    <div className="promo-bar" role="region" aria-label="Announcement">
+      <span aria-hidden="true" />
+      <button type="button" className="promo-vip-link" onClick={openVipPopup}>
+        VIP members get {STORE.vipDiscountPercent}% discount
       </button>
-      <div className="promo-viewport" aria-live="polite">
-        {MESSAGES.map((message, i) => (
-          <p key={message} className={`promo-message ${i === index ? "is-active" : ""}`} aria-hidden={i !== index}>
-            {message}
-          </p>
-        ))}
-      </div>
-      <button type="button" className="promo-arrow" onClick={() => step(1)} aria-label="Next announcement">
-        <ChevronRight size={16} />
-      </button>
+      <span aria-hidden="true" />
     </div>
   );
 }

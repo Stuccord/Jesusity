@@ -4,6 +4,7 @@ import { ChevronDown, X } from "lucide-react";
 import { STORE } from "../../config/store";
 import { DEFAULT_COUNTRY, DIAL_COUNTRIES } from "../../config/countries";
 import { joinVip, normalizePhone } from "../../lib/vip";
+import { OPEN_VIP_EVENT } from "./vipPopupEvents";
 
 const STORAGE_KEY = "jesusity_vip";
 const SHOW_AFTER_MS = 1000;
@@ -36,6 +37,8 @@ export function VipPopup() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hidden = HIDDEN_ON.some((p) => pathname.startsWith(p));
   const [isOpen, setIsOpen] = useState(false);
+  // Opened on purpose (not the automatic timer), so show it on any page
+  const [requested, setRequested] = useState(false);
   const [countryIso, setCountryIso] = useState(DEFAULT_COUNTRY.iso);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -62,6 +65,15 @@ export function VipPopup() {
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
+
+  useEffect(() => {
+    const open = () => {
+      setRequested(true);
+      setIsOpen(true);
+    };
+    window.addEventListener(OPEN_VIP_EVENT, open);
+    return () => window.removeEventListener(OPEN_VIP_EVENT, open);
+  }, []);
 
   const close = () => {
     if (status !== "joined") remember({ dismissedAt: Date.now() });
@@ -98,7 +110,7 @@ export function VipPopup() {
     }
   };
 
-  if (!isOpen || hidden) return null;
+  if (!isOpen || (hidden && !requested)) return null;
 
   return (
     <div className="vip-backdrop" onClick={close}>
