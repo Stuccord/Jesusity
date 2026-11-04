@@ -10582,7 +10582,7 @@ footer {
 
 :root {
   --muted-foreground: oklch(0.52 0 0);
-  --nk-grey: #f5f5f5;
+  --nk-grey: #ffffff;
   --nk-grey-2: #e5e5e5;
   --nk-text-2: #707072;
 }
@@ -11360,4 +11360,16 @@ footer.site-footer {
 .cart-qty-stepper {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Former grey surfaces are white now; hairlines keep them separate */
+.utility-bar,
+.promo-bar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.site-header .search-pill {
+  border: 1px solid var(--nk-grey-2);
+}
+.featured-card-image-stage {
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
