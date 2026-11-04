@@ -11349,3 +11349,15 @@ footer.site-footer {
   font-size: 12px;
   color: rgba(0, 0, 0, 0.55);
 }
+
+/* Cart drawer: all sections white, separated by their borders */
+.cart-drawer,
+.cart-drawer-perk,
+.cart-drawer-footer,
+.cart-item-image-wrap {
+  background-color: #ffffff;
+}
+.cart-qty-stepper {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
