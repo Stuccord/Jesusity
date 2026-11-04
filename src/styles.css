@@ -50,11 +50,51 @@
   font-display: swap;
 }
 
+/* Nike-matched type, self-hosted (SIL Open Font License, see src/assets/fonts).
+   size-adjust makes each face's capital height equal Nike's at the same font-size:
+   Inter for Helvetica Now (caps 0.710em), Saira Condensed Black for Nike Futura ND (caps 0.775em). */
+@font-face {
+  font-family: "Jesusity Sans";
+  src: url("./assets/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 97.3%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Jesusity Sans";
+  src: url("./assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 97.3%;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Jesusity Display";
+  src: url("./assets/fonts/saira-condensed-latin-900-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 110.7%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Jesusity Display";
+  src: url("./assets/fonts/saira-condensed-latin-ext-900-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 110.7%;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @theme inline {
-  /* Type modelled on nike.com: Inter stands in for Helvetica Now, Anton for Nike Futura */
-  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-heading: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-display: "Anton", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  /* Type modelled on nike.com (see the @font-face rules above) */
+  --font-sans: "Jesusity Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-heading: "Jesusity Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Jesusity Display", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -11389,16 +11429,19 @@ footer.site-footer {
 
 /* ------------------------------------------------------------------------
    Nike-style typography
-   Big uppercase headlines use the condensed display face (Anton, in place of
-   Nike Futura). Titles, product names, prices and UI use Inter Medium (in
-   place of Helvetica Now Display/Text Medium), like nike.com.
+   Measured against nike.com: big uppercase headlines use the display face
+   (in place of Nike Futura ND) at line-height 0.9; titles, product names,
+   prices and UI use the sans at weight 500, tracked tighter like Helvetica
+   Now Display; body text is the sans at 400.
    ------------------------------------------------------------------------ */
 html {
-  /* Anton has a single weight: never fake a bold version of it */
+  /* The display face has a single weight: never fake a bold version of it */
   font-synthesis-weight: none;
 }
 body {
   font-family: var(--font-sans);
+  /* Inter sets about 3% tighter than Helvetica Now Text */
+  letter-spacing: 0.014em;
 }
 
 .hero-copy h1,
@@ -11411,9 +11454,9 @@ body {
 .pdp-story-title,
 .vip-title {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 0.92;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
@@ -11451,7 +11494,27 @@ body {
 .pdp-size-guide-title {
   font-family: var(--font-heading);
   font-weight: 500;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Homepage hero: nike.com's sizes (headline 40px on phones up to 76px,
+   16/24 subtitle, 16px medium pill buttons with 6px 16px padding) */
+.hero-copy h1 {
+  font-size: clamp(40px, 6vw, 76px);
+}
+.hero-subtext {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.primary-cta,
+.secondary-cta {
+  min-height: 36px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
 }
 
 /* Inter is wider than the old face: tighten the desktop menu on small laptops */
