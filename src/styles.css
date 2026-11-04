@@ -51,8 +51,10 @@
 }
 
 @theme inline {
-  --font-sans: "Barlow", sans-serif;
-  --font-display: "VVDS Fifties", "VVDS", "Barlow Condensed", sans-serif;
+  /* Type modelled on nike.com: Inter stands in for Helvetica Now, Anton for Nike Futura */
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-heading: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Anton", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -11382,5 +11384,86 @@ footer.site-footer {
   .site-header.scrolled {
     padding-left: 20px;
     padding-right: 20px;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Nike-style typography
+   Big uppercase headlines use the condensed display face (Anton, in place of
+   Nike Futura). Titles, product names, prices and UI use Inter Medium (in
+   place of Helvetica Now Display/Text Medium), like nike.com.
+   ------------------------------------------------------------------------ */
+html {
+  /* Anton has a single weight: never fake a bold version of it */
+  font-synthesis-weight: none;
+}
+body {
+  font-family: var(--font-sans);
+}
+
+.hero-copy h1,
+.trending-headline,
+.featured-title,
+.featured-headline,
+.page-header-title,
+.branded-not-found-title,
+.lookbook-text-panel h2,
+.pdp-story-title,
+.vip-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.trust-row strong,
+.newsletter h2,
+.category-card h3,
+.trending-size-guide-header h3,
+.trending-price,
+.cart-drawer-title,
+.cart-drawer-empty h3,
+.search-overlay-input,
+.mobile-menu-main-link,
+.mobile-menu-expand-btn,
+.coming-together-heading,
+.catalog-empty-grid h3,
+.catalog-card-title,
+.pdp-title,
+.size-guide-modal-header h3,
+.pdp-recs-title,
+.cart-page-item-title,
+.cart-summary-title,
+.checkout-step-number,
+.checkout-step-header h3,
+.checkout-summary-card h3,
+.about-narrative-text h2,
+.about-pillar-card h3,
+.about-cta-banner h3,
+.contact-info-card h3,
+.contact-form-card h3,
+.contact-success-box h4,
+.faq-group-title,
+.policy-section h3,
+.track-step-info h4,
+.footer-col-title,
+.pdp-size-guide-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* Inter is wider than the old face: tighten the desktop menu on small laptops */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .desktop-nav {
+    gap: 2px;
+  }
+  .desktop-nav .nav-link {
+    padding: 8px;
+    font-size: 14px;
+  }
+  .site-header .search-pill {
+    min-width: 140px;
   }
 }
